@@ -1,0 +1,922 @@
+// MENU FUN ====================>>
+case 'tiktokghea':
+setReply(mess.wait)
+var gheayubi = JSON.parse(fs.readFileSync('./HostMedia/tiktokvids/gheayubi.json'))
+var hasil = pickRandom(gheayubi)
+conn.sendMessage(m.chat, { caption: mess.success, video: { url: hasil.url }}, { quoted: m })
+break
+case 'cosplayangel':
+setReply(mess.wait)
+var gheayubi = JSON.parse(fs.readFileSync('./HostMedia/tiktokvids/cosplayangel.json'))
+var hasil = pickRandom(gheayubi)
+conn.sendMessage(m.chat, { caption: 'nih bang ehanz\ningat jangan Gamon yak\nAng3l udah pergi;)', video: { url: hasil.url }}, { quoted: m })
+break
+case 'tiktokbocil':
+setReply(mess.wait)
+var bocil = JSON.parse(fs.readFileSync('./HostMedia/tiktokvids/bocil.json'))
+var hasil = pickRandom(bocil)
+conn.sendMessage(m.chat, { caption: mess.success, video: { url: hasil.url }}, { quoted: m })
+break
+case 'videosad':
+setReply(mess.wait)
+var ukhty = JSON.parse(fs.readFileSync('./HostMedia/tiktokvids/videosad.json'))
+var hasil = pickRandom(ukhty)
+conn.sendMessage(m.chat, { caption: mess.success, video: { url: hasil.url }}, { quoted: m })
+break
+case 'wibuvid':
+setReply(mess.wait)
+var santuy = JSON.parse(fs.readFileSync('./HostMedia/tiktokvids/wibuvid.json'))
+var hasil = pickRandom(santuy)
+conn.sendMessage(m.chat, { caption: mess.success, video: { url: hasil.url }}, { quoted: m })
+break
+case 'tiktokkayes':
+setReply(mess.wait)
+var kayes = JSON.parse(fs.readFileSync('./HostMedia/tiktokvids/kayes.json'))
+var hasil = pickRandom(kayes)
+conn.sendMessage(m.chat, { caption: mess.success, video: { url: hasil.url }}, { quoted: m })
+break
+case 'tiktokpanrika':
+setReply(mess.wait)
+var rikagusriani = JSON.parse(fs.readFileSync('./HostMedia/tiktokvids/panrika.json'))
+var hasil = pickRandom(rikagusriani)
+conn.sendMessage(m.chat, { caption: mess.success, video: { url: hasil.url }}, { quoted: m })
+break
+case 'videogalau':
+setReply(mess.wait)
+var notnot = JSON.parse(fs.readFileSync('./HostMedia/tiktokvids/galau.json'))
+var hasil = pickRandom(notnot)
+conn.sendMessage(m.chat, { caption: mess.success, video: { url: hasil.url }}, { quoted: m })
+break   
+ // ============================ //
+case 'chinese':
+setReply(mess.wait)
+var notnot = JSON.parse(fs.readFileSync('./HostMedia/tiktokpics/china.json'))
+var hasil = pickRandom(notnot)
+conn.sendMessage(m.chat, { caption: mess.success, image: { url: hasil.url } }, { quoted: m })
+break
+case 'hijab':
+setReply(mess.wait)
+var notnot = JSON.parse(fs.readFileSync('./HostMedia/tiktokpics/hijab.json'))
+var hasil = pickRandom(notnot)
+conn.sendMessage(m.chat, { caption: mess.success, image: { url: hasil.url } }, { quoted: m })
+break
+case 'indo':
+setReply(mess.wait)
+var notnot = JSON.parse(fs.readFileSync('./HostMedia/tiktokpics/indonesia.json'))
+var hasil = pickRandom(notnot)
+conn.sendMessage(m.chat, { caption: mess.success, image: { url: hasil.url } }, { quoted: m })
+break
+case 'japanese':
+setReply(mess.wait)
+var notnot = JSON.parse(fs.readFileSync('./HostMedia/tiktokpics/japan.json'))
+var hasil = pickRandom(notnot)
+conn.sendMessage(m.chat, { caption: mess.success, image: { url: hasil.url } }, { quoted: m })
+break
+case 'korean':
+setReply(mess.wait)
+var notnot = JSON.parse(fs.readFileSync('./HostMedia/tiktokpics/korea.json'))
+var hasil = pickRandom(notnot)
+conn.sendMessage(m.chat, { caption: mess.success, image: { url: hasil.url } }, { quoted: m })
+break
+case 'malay':
+setReply(mess.wait)
+var notnot = JSON.parse(fs.readFileSync('./HostMedia/tiktokpics/malaysia.json'))
+var hasil = pickRandom(notnot)
+conn.sendMessage(m.chat, { caption: mess.success, image: { url: hasil.url } }, { quoted: m })
+break
+case 'randomgirl':
+setReply(mess.wait)
+var notnot = JSON.parse(fs.readFileSync('./HostMedia/tiktokpics/random.json'))
+var hasil = pickRandom(notnot)
+conn.sendMessage(m.chat, { caption: mess.success, image: { url: hasil.url } }, { quoted: m })
+break
+case 'randomboy':
+setReply(mess.wait)
+var notnot = JSON.parse(fs.readFileSync('./HostMedia/tiktokpics/random2.json'))
+var hasil = pickRandom(notnot)
+conn.sendMessage(m.chat, { caption: mess.success, image: { url: hasil.url } }, { quoted: m })
+break
+case 'thai':
+setReply(mess.wait)
+var notnot = JSON.parse(fs.readFileSync('./HostMedia/tiktokpics/thailand.json'))
+var hasil = pickRandom(notnot)
+conn.sendMessage(m.chat, { caption: mess.success, image: { url: hasil.url } }, { quoted: m })
+break
+case 'vietnamese':
+setReply(mess.wait)
+var notnot = JSON.parse(fs.readFileSync('./HostMedia/tiktokpics/vietnam.json'))
+var hasil = pickRandom(notnot)
+conn.sendMessage(m.chat, { caption: mess.success, image: { url: hasil.url } }, { quoted: m })
+break       
+case 'hug': {
+        if (!m.isGroup) return sendStickGroup()
+        if (!m.mentionedJid[0] && !m.quoted) return setReply(`Tag or reply to a person`)
+        var pat = await fetchJson(`https://api.waifu.pics/sfw/hug`)
+    try {
+          let messsender = m.sender
+          let musers = ``
+          try {
+            users = m.mentionedJid[0] ? m.mentionedJid[0] : m.quoted ? m.quoted.sender : text.replace(/[^0-9]/g, '') + '@s.whatsapp.net'
+            ment = [messsender, users]
+          } catch {
+            users == "none"
+            ment = [messsender, m.sender]
+          }
+          if (users == "none") {
+           musers = `@${m.sender.split("@")[0]} hugged themself!`
+          } else {
+           musers = `@${m.sender.split("@")[0]} hugged @${users.split("@")[0]} `
+          }
+          const response = await axios.get(pat.url, { responseType: 'arraybuffer' })
+          const buffer = Buffer.from(response.data, "utf-8")
+          var fetchedgif = await GIFBufferToVideoBuffer(buffer)
+  conn.sendMessage(m.chat, { video: fetchedgif, gifPlayback: true, mentions: ment, caption: musers }, { quoted: m })
+        } catch (error) {
+          console.log(error);
+        }
+      }
+        break;
+        case 'cry': {
+        if (!m.isGroup) return sendStickGroup()
+        if (!m.mentionedJid[0] && !m.quoted) return setReply(`Tag or reply to a person`)
+        var pat = await fetchJson(`https://api.waifu.pics/sfw/cry`)
+        try {
+          let messsender = m.sender
+          let musers = ``
+          try {
+            users = m.mentionedJid[0] ? m.mentionedJid[0] : m.quoted ? m.quoted.sender : text.replace(/[^0-9]/g, '') + '@s.whatsapp.net'
+            ment = [messsender, users]
+          } catch {
+            users == "none"
+            ment = [messsender, m.sender]
+          }
+          if (users == "none") {
+           musers = `@${m.sender.split("@")[0]} cried themself!`
+          } else {
+           musers = `@${m.sender.split("@")[0]} cried @${users.split("@")[0]} `
+          }
+          const response = await axios.get(pat.url, { responseType: 'arraybuffer' })
+          const buffer = Buffer.from(response.data, "utf-8")
+          var fetchedgif = await GIFBufferToVideoBuffer(buffer)
+          conn.sendMessage(m.chat, { video: fetchedgif, gifPlayback: true, mentions: ment, caption: musers }, { quoted: m })
+        } catch (error) {
+          console.log(error);
+        }
+      }
+        break;
+        case 'kill': {
+        if (!m.isGroup) return sendStickGroup()
+        if (!m.mentionedJid[0] && !m.quoted) return setReply(`Tag or reply to a person`)
+        var pat = await fetchJson(`https://api.waifu.pics/sfw/kill`)
+        try {
+          let messsender = m.sender
+          let musers = ``
+          try {
+            users = m.mentionedJid[0] ? m.mentionedJid[0] : m.quoted ? m.quoted.sender : text.replace(/[^0-9]/g, '') + '@s.whatsapp.net'
+            ment = [messsender, users]
+          } catch {
+            users == "none"
+            ment = [messsender, m.sender]
+          }
+          if (users == "none") {
+           musers = `@${m.sender.split("@")[0]} killed themself!`
+          } else {
+           musers = `@${m.sender.split("@")[0]} killed @${users.split("@")[0]} `
+          }
+          const response = await axios.get(pat.url, { responseType: 'arraybuffer' })
+          const buffer = Buffer.from(response.data, "utf-8")
+          var fetchedgif = await GIFBufferToVideoBuffer(buffer)
+  conn.sendMessage(m.chat, { video: fetchedgif, gifPlayback: true, mentions: ment, caption: musers }, { quoted: m })
+        } catch (error) {
+          console.log(error);
+        }
+      }
+        break;
+        case 'pat': {
+        if (!m.isGroup) return sendStickGroup()
+        if (!m.mentionedJid[0] && !m.quoted) return setReply(`Tag or reply to a person`)
+        var pat = await fetchJson(`https://api.waifu.pics/sfw/pat`)
+        try {
+          let messsender = m.sender
+          let musers = ``
+          try {
+            users = m.mentionedJid[0] ? m.mentionedJid[0] : m.quoted ? m.quoted.sender : text.replace(/[^0-9]/g, '') + '@s.whatsapp.net'
+            ment = [messsender, users]
+          } catch {
+            users == "none"
+            ment = [messsender, m.sender]
+          }
+          if (users == "none") {
+           musers = `@${m.sender.split("@")[0]} patted themself!`
+          } else {
+           musers = `@${m.sender.split("@")[0]} patted @${users.split("@")[0]} `
+          }
+          const response = await axios.get(pat.url, { responseType: 'arraybuffer' })
+          const buffer = Buffer.from(response.data, "utf-8")
+          var fetchedgif = await GIFBufferToVideoBuffer(buffer)
+  conn.sendMessage(m.chat, { video: fetchedgif, gifPlayback: true, mentions: ment, caption: musers }, { quoted: m })
+        } catch (error) {
+          console.log(error);
+        }
+      }
+        break;
+        case 'lick': {
+        if (!m.isGroup) return sendStickGroup()
+        if (!m.mentionedJid[0] && !m.quoted) return setReply(`Tag or reply to a person`)
+        var pat = await fetchJson(`https://api.waifu.pics/sfw/lick`)
+        try {
+          let messsender = m.sender
+          let musers = ``
+          try {
+            users = m.mentionedJid[0] ? m.mentionedJid[0] : m.quoted ? m.quoted.sender : text.replace(/[^0-9]/g, '') + '@s.whatsapp.net'
+            ment = [messsender, users]
+          } catch {
+            users == "none"
+            ment = [messsender, m.sender]
+          }
+          if (users == "none") {
+           musers = `@${m.sender.split("@")[0]} licked themself!`
+          } else {
+           musers = `@${m.sender.split("@")[0]} licked @${users.split("@")[0]} `
+          }
+          const response = await axios.get(pat.url, { responseType: 'arraybuffer' })
+          const buffer = Buffer.from(response.data, "utf-8")
+          var fetchedgif = await GIFBufferToVideoBuffer(buffer)
+ conn.sendMessage(m.chat, { video: fetchedgif, gifPlayback: true, mentions: ment, caption: musers }, { quoted: m })
+        } catch (error) {
+          console.log(error);
+        }
+      }
+        break;
+        case 'kiss': {
+
+        if (!m.isGroup) return sendStickGroup()
+        if (!m.mentionedJid[0] && !m.quoted) return setReply(`Tag or reply to a person`)
+        var pat = await fetchJson(`https://api.waifu.pics/sfw/kiss`)
+        try {
+          let messsender = m.sender
+          let musers = ``
+          try {
+            users = m.mentionedJid[0] ? m.mentionedJid[0] : m.quoted ? m.quoted.sender : text.replace(/[^0-9]/g, '') + '@s.whatsapp.net'
+            ment = [messsender, users]
+          } catch {
+            users == "none"
+            ment = [messsender, m.sender]
+          }
+          if (users == "none") {
+           musers = `@${m.sender.split("@")[0]} kissed themself!`
+          } else {
+           musers = `@${m.sender.split("@")[0]} kissed @${users.split("@")[0]} `
+          }
+          const response = await axios.get(pat.url, { responseType: 'arraybuffer' })
+          const buffer = Buffer.from(response.data, "utf-8")
+          var fetchedgif = await GIFBufferToVideoBuffer(buffer)
+  conn.sendMessage(m.chat, { video: fetchedgif, gifPlayback: true, mentions: ment, caption: musers }, { quoted: m })
+        } catch (error) {
+          console.log(error);
+        }
+      }
+        break;
+        case 'bite': {
+        if (!m.isGroup) return sendStickGroup()
+        if (!m.mentionedJid[0] && !m.quoted) return setReply(`Tag or reply to a person`)
+ var pat = await fetchJson(`https://api.waifu.pics/sfw/cry`)
+        try {
+  let messsender = m.sender
+   let musers = ``
+    try {
+  users = m.mentionedJid[0] ? m.mentionedJid[0] : m.quoted ? m.quoted.sender : text.replace(/[^0-9]/g, '') + '@s.whatsapp.net'
+            ment = [messsender, users]
+          } catch {
+            users == "none"
+            ment = [messsender, m.sender]
+          }
+          if (users == "none") {
+           musers = `@${m.sender.split("@")[0]} bit themself!`
+          } else {
+           musers = `@${m.sender.split("@")[0]} bit @${users.split("@")[0]} `
+          }
+          const response = await axios.get(pat.url, { responseType: 'arraybuffer' })
+          const buffer = Buffer.from(response.data, "utf-8")
+          var fetchedgif = await GIFBufferToVideoBuffer(buffer)
+         conn.sendMessage(m.chat, { video: fetchedgif, gifPlayback: true, mentions: ment, caption: musers }, { quoted: m })
+        } catch (error) {
+          console.log(error);
+        }
+      }
+        break;
+        case 'yeet': {
+        if (!m.isGroup) return sendStickGroup()
+        if (!m.mentionedJid[0] && !m.quoted) return setReply(`Tag or reply to a person`)
+        var pat = await fetchJson(`https://api.waifu.pics/sfw/yeet`)
+        try {
+          let messsender = m.sender
+          let musers = ``
+          try {
+            users = m.mentionedJid[0] ? m.mentionedJid[0] : m.quoted ? m.quoted.sender : text.replace(/[^0-9]/g, '') + '@s.whatsapp.net'
+            ment = [messsender, users]
+          } catch {
+            users == "none"
+            ment = [messsender, m.sender]
+          }
+          if (users == "none") {
+           musers = `@${m.sender.split("@")[0]} yeeted themself!`
+          } else {
+           musers = `@${m.sender.split("@")[0]} yeeted @${users.split("@")[0]} `
+          }
+          const response = await axios.get(pat.url, { responseType: 'arraybuffer' })
+          const buffer = Buffer.from(response.data, "utf-8")
+          var fetchedgif = await GIFBufferToVideoBuffer(buffer)
+  conn.sendMessage(m.chat, { video: fetchedgif, gifPlayback: true, mentions: ment, caption: musers }, { quoted: m })
+        } catch (error) {
+          console.log(error);
+        }
+      }
+        break;
+        case 'bully': {
+        if (!m.isGroup) return sendStickGroup()
+        if (!m.mentionedJid[0] && !m.quoted) return setReply(`Tag or reply to a person`)
+        var pat = await fetchJson(`https://api.waifu.pics/sfw/bully`)
+        try {
+          let messsender = m.sender
+          let musers = ``
+          try {
+            users = m.mentionedJid[0] ? m.mentionedJid[0] : m.quoted ? m.quoted.sender : text.replace(/[^0-9]/g, '') + '@s.whatsapp.net'
+            ment = [messsender, users]
+          } catch {
+            users == "none"
+            ment = [messsender, m.sender]
+          }
+          if (users == "none") {
+           musers = `@${m.sender.split("@")[0]} bullied themself!`
+          } else {
+           musers = `@${m.sender.split("@")[0]} bullied @${users.split("@")[0]} `
+          }
+          const response = await axios.get(pat.url, { responseType: 'arraybuffer' })
+          const buffer = Buffer.from(response.data, "utf-8")
+          var fetchedgif = await GIFBufferToVideoBuffer(buffer)
+  conn.sendMessage(m.chat, { video: fetchedgif, gifPlayback: true, mentions: ment, caption: musers }, { quoted: m })
+        } catch (error) {
+          console.log(error);
+        }
+      }
+        break;
+        case 'bonk': {
+        if (!m.isGroup) return sendStickGroup()
+        if (!m.mentionedJid[0] && !m.quoted) return setReply(`Tag or reply to a person`)
+        var pat = await fetchJson(`https://api.waifu.pics/sfw/bonk`)
+        try {
+          let messsender = m.sender
+          let musers = ``
+          try {
+            users = m.mentionedJid[0] ? m.mentionedJid[0] : m.quoted ? m.quoted.sender : text.replace(/[^0-9]/g, '') + '@s.whatsapp.net'
+            ment = [messsender, users]
+          } catch {
+            users == "none"
+            ment = [messsender, m.sender]
+          }
+          if (users == "none") {
+           musers = `@${m.sender.split("@")[0]} bonked themself!`
+          } else {
+           musers = `@${m.sender.split("@")[0]} bonked @${users.split("@")[0]} `
+          }
+          const response = await axios.get(pat.url, { responseType: 'arraybuffer' })
+          const buffer = Buffer.from(response.data, "utf-8")
+          var fetchedgif = await GIFBufferToVideoBuffer(buffer)
+ conn.sendMessage(m.chat, { video: fetchedgif, gifPlayback: true, mentions: ment, caption: musers }, { quoted: m })
+        } catch (error) {
+          console.log(error);
+        }      }
+        break;
+        case 'wink': {
+        if (!m.isGroup) return sendStickGroup()
+        if (!m.mentionedJid[0] && !m.quoted) return setReply(`Tag or reply to a person`)
+  var pat = await fetchJson(`https://api.waifu.pics/sfw/wink`)
+       try {
+         let messsender = m.sender
+          let musers = ``
+          try {
+            users = m.mentionedJid[0] ? m.mentionedJid[0] : m.quoted ? m.quoted.sender : text.replace(/[^0-9]/g, '') + '@s.whatsapp.net'
+            ment = [messsender, users]
+          } catch {
+            users == "none"
+            ment = [messsender, m.sender]
+          }
+          if (users == "none") {
+           musers = `@${m.sender.split("@")[0]} winked themself!`
+          } else {
+           musers = `@${m.sender.split("@")[0]} winked @${users.split("@")[0]} `
+          }
+          const response = await axios.get(pat.url, { responseType: 'arraybuffer' })
+          const buffer = Buffer.from(response.data, "utf-8")
+          var fetchedgif = await GIFBufferToVideoBuffer(buffer)
+          conn.sendMessage(m.chat, { video: fetchedgif, gifPlayback: true, mentions: ment, caption: musers }, { quoted: m })
+        } catch (error) {
+          console.log(error);
+        }
+      }
+        break;
+        case 'poke': {
+        if (!m.isGroup) return sendStickGroup()
+        if (!m.mentionedJid[0] && !m.quoted) return setReply(`Tag or reply to a person`)
+        var pat = await fetchJson(`https://api.waifu.pics/sfw/poke`)
+        try {
+          let messsender = m.sender
+          let musers = ``
+          try {
+            users = m.mentionedJid[0] ? m.mentionedJid[0] : m.quoted ? m.quoted.sender : text.replace(/[^0-9]/g, '') + '@s.whatsapp.net'
+            ment = [messsender, users]
+          } catch {
+            users == "none"
+            ment = [messsender, m.sender]
+          }
+          if (users == "none") {
+           musers = `@${m.sender.split("@")[0]} poked themself!`
+          } else {
+           musers = `@${m.sender.split("@")[0]} poked @${users.split("@")[0]} `
+          }
+          const response = await axios.get(pat.url, { responseType: 'arraybuffer' })
+          const buffer = Buffer.from(response.data, "utf-8")
+          var fetchedgif = await GIFBufferToVideoBuffer(buffer)
+ conn.sendMessage(m.chat, { video: fetchedgif, gifPlayback: true, mentions: ment, caption: musers }, { quoted: m })
+        } catch (error) {
+          console.log(error);
+        }
+      }
+        break;
+        case 'nom': {
+        if (!m.isGroup) return sendStickGroup()
+        if (!m.mentionedJid[0] && !m.quoted) return setReply(`Tag or reply to a person`)
+        var pat = await fetchJson(`https://api.waifu.pics/sfw/nom`)
+        try {
+          let messsender = m.sender
+          let musers = ``
+          try {
+            users = m.mentionedJid[0] ? m.mentionedJid[0] : m.quoted ? m.quoted.sender : text.replace(/[^0-9]/g, '') + '@s.whatsapp.net'
+            ment = [messsender, users]
+          } catch {
+            users == "none"
+            ment = [messsender, m.sender]
+          }
+          if (users == "none") {
+           musers = `@${m.sender.split("@")[0]} nommed themself!`
+          } else {
+           musers = `@${m.sender.split("@")[0]} nommed @${users.split("@")[0]} `
+          }
+          const response = await axios.get(pat.url, { responseType: 'arraybuffer' })
+          const buffer = Buffer.from(response.data, "utf-8")
+          var fetchedgif = await GIFBufferToVideoBuffer(buffer)
+  conn.sendMessage(m.chat, { video: fetchedgif, gifPlayback: true, mentions: ment, caption: musers }, { quoted: m })
+        } catch (error) {
+          console.log(error);
+        }
+      }
+        break;
+        case 'slap': {
+        if (!m.isGroup) return sendStickGroup()
+        if (!m.mentionedJid[0] && !m.quoted) return setReply(`Tag or reply to a person`)
+        var pat = await fetchJson(`https://api.waifu.pics/sfw/slap`)
+        try {
+          let messsender = m.sender
+          let musers = ``
+          try {
+            users = m.mentionedJid[0] ? m.mentionedJid[0] : m.quoted ? m.quoted.sender : text.replace(/[^0-9]/g, '') + '@s.whatsapp.net'
+            ment = [messsender, users]
+          } catch {
+            users == "none"
+            ment = [messsender, m.sender]
+          }
+          if (users == "none") {
+           musers = `@${m.sender.split("@")[0]} slapped themself!`
+          } else {
+           musers = `@${m.sender.split("@")[0]} slapped @${users.split("@")[0]} `
+          }
+          const response = await axios.get(pat.url, { responseType: 'arraybuffer' })
+          const buffer = Buffer.from(response.data, "utf-8")
+          var fetchedgif = await GIFBufferToVideoBuffer(buffer)
+ conn.sendMessage(m.chat, { video: fetchedgif, gifPlayback: true, mentions: ment, caption: musers }, { quoted: m })        } catch (error) {    
+      console.log(error);
+   }
+      }
+        break;
+        case 'smile': {
+        if (!m.isGroup) return sendStickGroup()
+        if (!m.mentionedJid[0] && !m.quoted) return setReply(`Tag or reply to a person`)
+        var pat = await fetchJson(`https://api.waifu.pics/sfw/smile`)
+        try {
+          let messsender = m.sender
+          let musers = ``
+          try {
+            users = m.mentionedJid[0] ? m.mentionedJid[0] : m.quoted ? m.quoted.sender : text.replace(/[^0-9]/g, '') + '@s.whatsapp.net'
+            ment = [messsender, users]
+          } catch {
+            users == "none"
+            ment = [messsender, m.sender]
+          }
+          if (users == "none") {
+           musers = `@${m.sender.split("@")[0]} smiled themself!`
+          } else {
+           musers = `@${m.sender.split("@")[0]} smiled @${users.split("@")[0]} `
+          }
+          const response = await axios.get(pat.url, { responseType: 'arraybuffer' })
+          const buffer = Buffer.from(response.data, "utf-8")
+          var fetchedgif = await GIFBufferToVideoBuffer(buffer)
+  conn.sendMessage(m.chat, { video: fetchedgif, gifPlayback: true, mentions: ment, caption: musers }, { quoted: m })
+        } catch (error) {
+          console.log(error);
+        }
+      }
+    break;
+   case 'wave': {
+        if (!m.isGroup) return sendStickGroup()
+        if (!m.mentionedJid[0] && !m.quoted) return setReply(`Tag or reply to a person`)
+        var pat = await fetchJson(`https://api.waifu.pics/sfw/wave`)
+        try {
+          let messsender = m.sender
+          let musers = ``
+          try {
+            users = m.mentionedJid[0] ? m.mentionedJid[0] : m.quoted ? m.quoted.sender : text.replace(/[^0-9]/g, '') + '@s.whatsapp.net'
+            ment = [messsender, users]
+          } catch {
+            users == "none"
+            ment = [messsender, m.sender]
+          }
+          if (users == "none") {
+           musers = `@${m.sender.split("@")[0]} waved themself!`
+          } else {
+           musers = `@${m.sender.split("@")[0]} waved @${users.split("@")[0]} `
+          }
+          const response = await axios.get(pat.url, { responseType: 'arraybuffer' })
+          const buffer = Buffer.from(response.data, "utf-8")
+          var fetchedgif = await GIFBufferToVideoBuffer(buffer)
+ conn.sendMessage(m.chat, { video: fetchedgif, gifPlayback: true, mentions: ment, caption: musers }, { quoted: m })
+        } catch (error) {
+          console.log(error);
+        }
+      }
+        break;
+        case 'awoo': {
+        if (!m.isGroup) return sendStickGroup()
+        if (!m.mentionedJid[0] && !m.quoted) return setReply(`Tag or reply to a person`)
+        var pat = await fetchJson(`https://api.waifu.pics/sfw/awoo`)
+        try {
+          let messsender = m.sender
+          let musers = ``
+          try {
+            users = m.mentionedJid[0] ? m.mentionedJid[0] : m.quoted ? m.quoted.sender : text.replace(/[^0-9]/g, '') + '@s.whatsapp.net'
+            ment = [messsender, users]
+          } catch {
+            users == "none"
+            ment = [messsender, m.sender]
+          }
+          if (users == "none") {
+           musers = `@${m.sender.split("@")[0]} awooed themself!`
+          } else {
+           musers = `@${m.sender.split("@")[0]} awooed @${users.split("@")[0]} `
+          }
+          const response = await axios.get(pat.url, { responseType: 'arraybuffer' })
+          const buffer = Buffer.from(response.data, "utf-8")
+          var fetchedgif = await GIFBufferToVideoBuffer(buffer)
+  conn.sendMessage(m.chat, { video: fetchedgif, gifPlayback: true, mentions: ment, caption: musers }, { quoted: m })
+        } catch (error) {
+          console.log(error);
+        }
+      }
+        break;
+        case 'blush': {
+        if (!m.isGroup) return sendStickGroup()
+        if (!m.mentionedJid[0] && !m.quoted) return setReply(`Tag or reply to a person`)
+        var pat = await fetchJson(`https://api.waifu.pics/sfw/blush`)
+        try {
+          let messsender = m.sender
+          let musers = ``
+          try {
+            users = m.mentionedJid[0] ? m.mentionedJid[0] : m.quoted ? m.quoted.sender : text.replace(/[^0-9]/g, '') + '@s.whatsapp.net'
+            ment = [messsender, users]
+          } catch {
+            users == "none"
+            ment = [messsender, m.sender]
+          }
+          if (users == "none") {
+           musers = `@${m.sender.split("@")[0]} blushed themself!`
+          } else {
+           musers = `@${m.sender.split("@")[0]} blushed @${users.split("@")[0]} `
+          }
+          const response = await axios.get(pat.url, { responseType: 'arraybuffer' })
+          const buffer = Buffer.from(response.data, "utf-8")
+          var fetchedgif = await GIFBufferToVideoBuffer(buffer)
+  conn.sendMessage(m.chat, { video: fetchedgif, gifPlayback: true, mentions: ment, caption: musers }, { quoted: m })
+        } catch (error) {
+        console.log(error);
+        }
+      }
+        break;
+        case 'smug': {
+        if (!m.isGroup) return sendStickGroup()
+        if (!m.mentionedJid[0] && !m.quoted) return replygcxeon(`Tag or reply to a person`)
+        var pat = await fetchJson(`https://api.waifu.pics/sfw/smug`)
+        try {
+      let messsender = m.sender
+          let musers = ``
+         try {
+           users = m.mentionedJid[0] ? m.mentionedJid[0] : m.quoted ? m.quoted.sender : text.replace(/[^0-9]/g, '') + '@s.whatsapp.net'
+            ment = [messsender, users]
+          } catch {
+            users == "none"
+            ment = [messsender, m.sender]
+          }
+         if (users == "none") {
+           musers = `@${m.sender.split("@")[0]} smugged themself!`
+          } else {
+           musers = `@${m.sender.split("@")[0]} smugged @${users.split("@")[0]} `
+          }
+         const response = await axios.get(pat.url, { responseType: 'arraybuffer' })
+          const buffer = Buffer.from(response.data, "utf-8")
+          var fetchedgif = await GIFBufferToVideoBuffer(buffer)
+ conn.sendMessage(m.chat, { video: fetchedgif, gifPlayback: true, mentions: ment, caption: musers }, { quoted: m })
+        } catch (error) {
+          console.log(error);
+        }
+      }
+        break;
+        case 'glomp': {
+        if (!m.isGroup) return sendStickGroup()
+        if (!m.mentionedJid[0] && !m.quoted) return setReply(`Tag or reply to a person`)
+        var pat = await fetchJson(`https://api.waifu.pics/sfw/glomp`)
+        try {
+          let messsender = m.sender
+          let musers = ``
+          try {
+            users = m.mentionedJid[0] ? m.mentionedJid[0] : m.quoted ? m.quoted.sender : text.replace(/[^0-9]/g, '') + '@s.whatsapp.net'
+            ment = [messsender, users]
+          } catch {
+            users == "none"
+            ment = [messsender, m.sender]
+          }
+          if (users == "none") {
+           musers = `@${m.sender.split("@")[0]} glomped themself!`
+          } else {
+           musers = `@${m.sender.split("@")[0]} glomped @${users.split("@")[0]} `
+          }
+          const response = await axios.get(pat.url, { responseType: 'arraybuffer' })
+          const buffer = Buffer.from(response.data, "utf-8")
+          var fetchedgif = await GIFBufferToVideoBuffer(buffer)
+   conn.sendMessage(m.chat, { video: fetchedgif, gifPlayback: true, mentions: ment, caption: musers }, { quoted: m })
+        } catch (error) {
+          console.log(error);
+        }
+      }
+        break;
+        case 'happy': {
+        if (!m.isGroup) return sendStickGroup()
+        if (!m.mentionedJid[0] && !m.quoted) return setReply(`Tag or reply to a person`)
+        var pat = await fetchJson(`https://api.waifu.pics/sfw/happy`)
+        try {
+          let messsender = m.sender
+          let musers = ``
+          try {
+            users = m.mentionedJid[0] ? m.mentionedJid[0] : m.quoted ? m.quoted.sender : text.replace(/[^0-9]/g, '') + '@s.whatsapp.net'
+           ment = [messsender, users]
+          } catch {
+            users == "none"
+            ment = [messsender, m.sender]
+          }
+          if (users == "none") {
+           musers = `@${m.sender.split("@")[0]} happied themself!`
+          } else {
+           musers = `@${m.sender.split("@")[0]} happied @${users.split("@")[0]} `
+          }
+          const response = await axios.get(pat.url, { responseType: 'arraybuffer' })
+          const buffer = Buffer.from(response.data, "utf-8")
+          var fetchedgif = await GIFBufferToVideoBuffer(buffer)
+    conn.sendMessage(m.chat, { video: fetchedgif, gifPlayback: true, mentions: ment, caption: musers }, { quoted: m })
+        } catch (error) {
+          console.log(error);
+        }
+      }
+        break;
+        case 'dance': {
+        if (!m.isGroup) return sendStickGroup()
+        if (!m.mentionedJid[0] && !m.quoted) return setReply(`Tag or reply to a person`)
+        var pat = await fetchJson(`https://api.waifu.pics/sfw/dance`)
+        try {
+          let messsender = m.sender
+          let musers = ``
+          try {
+            users = m.mentionedJid[0] ? m.mentionedJid[0] : m.quoted ? m.quoted.sender : text.replace(/[^0-9]/g, '') + '@s.whatsapp.net'
+            ment = [messsender, users]
+          } catch {
+            users == "none"
+            ment = [messsender, m.sender]
+          }
+          if (users == "none") {
+           musers = `@${m.sender.split("@")[0]} danced themself!`
+          } else {
+           musers = `@${m.sender.split("@")[0]} danced @${users.split("@")[0]} `
+          }
+          const response = await axios.get(pat.url, { responseType: 'arraybuffer' })
+          const buffer = Buffer.from(response.data, "utf-8")
+          var fetchedgif = await GIFBufferToVideoBuffer(buffer)
+ conn.sendMessage(m.chat, { video: fetchedgif, gifPlayback: true, mentions: ment, caption: musers }, { quoted: m })
+        } catch (error) {
+          console.log(error);
+        }
+      }
+        break;
+        case 'cringe': {
+        if (!m.isGroup) return sendStickGroup()
+        if (!m.mentionedJid[0] && !m.quoted) return replygcxeon(`Tag or reply to a person`)
+        var pat = await fetchJson(`https://api.waifu.pics/sfw/cringe`)
+        try {
+          let messsender = m.sender
+          let musers = ``
+          try {
+            users = m.mentionedJid[0] ? m.mentionedJid[0] : m.quoted ? m.quoted.sender : text.replace(/[^0-9]/g, '') + '@s.whatsapp.net'
+            ment = [messsender, users]
+          } catch {
+            users == "none"
+            ment = [messsender, m.sender]
+          }
+          if (users == "none") {
+           musers = `@${m.sender.split("@")[0]} cringed themself!`
+          } else {
+           musers = `@${m.sender.split("@")[0]} cringed @${users.split("@")[0]} `
+          }
+          const response = await axios.get(pat.url, { responseType: 'arraybuffer' })
+          const buffer = Buffer.from(response.data, "utf-8")
+          var fetchedgif = await GIFBufferToVideoBuffer(buffer)
+  conn.sendMessage(m.chat, { video: fetchedgif, gifPlayback: true, mentions: ment, caption: musers }, { quoted: m })
+        } catch (error) {
+          console.log(error);
+        }
+      }
+        break;
+        case 'cuddle': {
+        if (!m.isGroup) return sendStickGroup()
+        if (!m.mentionedJid[0] && !m.quoted) return setReply(`Tag or reply to a person`)
+        var pat = await fetchJson(`https://api.waifu.pics/sfw/cuddle`)
+        try {
+          let messsender = m.sender
+          let musers = ``
+          try {
+            users = m.mentionedJid[0] ? m.mentionedJid[0] : m.quoted ? m.quoted.sender : text.replace(/[^0-9]/g, '') + '@s.whatsapp.net'
+            ment = [messsender, users]
+          } catch {
+            users == "none"
+            ment = [messsender, m.sender]
+          }
+          if (users == "none") {
+           musers = `@${m.sender.split("@")[0]} cuddled themself!`
+          } else {
+           musers = `@${m.sender.split("@")[0]} cuddled @${users.split("@")[0]} `
+          }
+          const response = await axios.get(pat.url, { responseType: 'arraybuffer' })
+          const buffer = Buffer.from(response.data, "utf-8")
+          var fetchedgif = await GIFBufferToVideoBuffer(buffer)
+  conn.sendMessage(m.chat, { video: fetchedgif, gifPlayback: true, mentions: ment, caption: musers }, { quoted: m })
+        } catch (error) {
+          console.log(error);
+        }
+      }
+        break;
+        case 'highfive': {
+        if (!m.isGroup) return sendStickGroup()
+        if (!m.mentionedJid[0] && !m.quoted) return setReply(`Tag or reply to a person`)
+        var pat = await fetchJson(`https://api.waifu.pics/sfw/awoo`)
+        try {
+          let messsender = m.sender
+          let musers = ``
+          try {
+            users = m.mentionedJid[0] ? m.mentionedJid[0] : m.quoted ? m.quoted.sender : text.replace(/[^0-9]/g, '') + '@s.whatsapp.net'
+            ment = [messsender, users]
+          } catch {
+            users == "none"
+            ment = [messsender, m.sender]
+          }
+          if (users == "none") {
+           musers = `@${m.sender.split("@")[0]} highfived themself!`
+          } else {
+
+           musers = `@${m.sender.split("@")[0]} highfived @${users.split("@")[0]} `
+          }
+          const response = await axios.get(pat.url, { responseType: 'arraybuffer' })
+          const buffer = Buffer.from(response.data, "utf-8")
+          var fetchedgif = await GIFBufferToVideoBuffer(buffer)
+  conn.sendMessage(m.chat, { video: fetchedgif, gifPlayback: true, mentions: ment, caption: musers }, { quoted: m })
+        } catch (error) {
+          console.log(error);
+        }
+      }
+        break;
+        case 'handhold': {
+        if (!m.isGroup) return sendStickGroup()
+        if (!m.mentionedJid[0] && !m.quoted) return replygcxeon(`Tag or reply to a person`)
+        var pat = await fetchJson(`https://api.waifu.pics/sfw/handhold`)
+        try {
+          let messsender = m.sender
+          let musers = ``
+          try {
+            users = m.mentionedJid[0] ? m.mentionedJid[0] : m.quoted ? m.quoted.sender : text.replace(/[^0-9]/g, '') + '@s.whatsapp.net'
+            ment = [messsender, users]
+          } catch {
+            users == "none"
+            ment = [messsender, m.sender]
+          }
+          if (users == "none") {
+           musers = `@${m.sender.split("@")[0]} handheld themself!`
+          } else {
+           musers = `@${m.sender.split("@")[0]} handheld @${users.split("@")[0]} `
+          }
+          const response = await axios.get(pat.url, { responseType: 'arraybuffer' })
+          const buffer = Buffer.from(response.data, "utf-8")
+          var fetchedgif = await GIFBufferToVideoBuffer(buffer)
+  conn.sendMessage(m.chat, { video: fetchedgif, gifPlayback: true, mentions: ment, caption: musers }, { quoted: m })
+        } catch (error) {
+          console.log(error);
+        }
+      }
+        break;
+                case 'spank': {
+        if (!m.isGroup) return sendStickGroup()
+        if (!m.mentionedJid[0] && !m.quoted) return setReply(`Tag or reply to a person`)
+        var pat = await fetchJson(`https://nekos.life/api/v2/img/spank`)
+        try {
+          let messsender = m.sender
+          let musers = ``
+          try {
+            users = m.mentionedJid[0] ? m.mentionedJid[0] : m.quoted ? m.quoted.sender : text.replace(/[^0-9]/g, '') + '@s.whatsapp.net'
+            ment = [messsender, users]
+          } catch {
+            users == "none"
+            ment = [messsender, m.sender]
+          }
+          if (users == "none") {
+           musers = `@${m.sender.split("@")[0]} spanked themself!`
+          } else {
+           musers = `@${m.sender.split("@")[0]} spanked @${users.split("@")[0]} `
+          }
+          const response = await axios.get(pat.url, { responseType: 'arraybuffer' })
+          const buffer = Buffer.from(response.data, "utf-8")
+          var fetchedgif = await GIFBufferToVideoBuffer(buffer)
+  conn.sendMessage(m.chat, { video: fetchedgif, gifPlayback: true, mentions: ment, caption: musers }, { quoted: m })
+        } catch (error) {
+          console.log(error);
+        }
+      }
+        break;
+        case 'feed': {
+        if (!m.isGroup) return sendStickGroup()
+        if (!m.mentionedJid[0] && !m.quoted) return setReply(`Tag or reply to a person`)
+        var pat = await fetchJson(`https://nekos.life/api/v2/img/feed`)
+        try {
+          let messsender = m.sender
+          let musers = ``
+          try {
+            users = m.mentionedJid[0] ? m.mentionedJid[0] : m.quoted ? m.quoted.sender : text.replace(/[^0-9]/g, '') + '@s.whatsapp.net'
+            ment = [messsender, users]
+          } catch {
+            users == "none"
+            ment = [messsender, m.sender]
+          }
+          if (users == "none") {
+           musers = `@${m.sender.split("@")[0]} fed themself!`
+          } else {
+           musers = `@${m.sender.split("@")[0]} fed @${users.split("@")[0]} `
+          }
+          const response = await axios.get(pat.url, { responseType: 'arraybuffer' })
+          const buffer = Buffer.from(response.data, "utf-8")
+          var fetchedgif = await GIFBufferToVideoBuffer(buffer)
+  conn.sendMessage(m.chat, { video: fetchedgif, gifPlayback: true, mentions: ment, caption: musers }, { quoted: m })
+        } catch (error) {
+          console.log(error);
+        }
+      }
+        break;
+                case 'tickle': {
+        if (!m.isGroup) return sendStickGroup()
+        if (!m.mentionedJid[0] && !m.quoted) return setReply(`Tag or reply to a person`)
+        var pat = await fetchJson(`https://nekos.life/api/v2/img/tickle`)
+        try {
+          let messsender = m.sender
+          let musers = ``
+          try {
+            users = m.mentionedJid[0] ? m.mentionedJid[0] : m.quoted ? m.quoted.sender : text.replace(/[^0-9]/g, '') + '@s.whatsapp.net'
+            ment = [messsender, users]
+          } catch {
+            users == "none"
+            ment = [messsender, m.sender]
+          }
+          if (users == "none") {
+           musers = `@${m.sender.split("@")[0]} tickled themself!`
+          } else {
+           musers = `@${m.sender.split("@")[0]} tickled @${users.split("@")[0]} `
+          }
+          const response = await axios.get(pat.url, { responseType: 'arraybuffer' })
+          const buffer = Buffer.from(response.data, "utf-8")
+          var fetchedgif = await GIFBufferToVideoBuffer(buffer)
+       conn.sendMessage(m.chat, { video: fetchedgif, gifPlayback: true, mentions: ment, caption: musers }, { quoted: m })
+        } catch (error) {
+          console.log(error);
+        }
+      }
+        break
