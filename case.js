@@ -3841,7 +3841,7 @@ if (!isGroup) return sendStickGroup()
 sendStickAwait()
                 let search = await yts(q)
                 let linknya = search.all[0].url
-                let bodytextnya = `ᴛɪᴛʟᴇ : *${search.all[0].title}*\nᴠɪᴇᴡs : *${search.all[0].views}*\nᴅᴜʀᴀᴛɪᴏɴ : *${search.all[0].timestamp}*\nᴜᴘʟᴏᴀᴅᴇᴅ : *${search.all[0].ago}*\nᴜʀʟ : *${linknya}*`
+                let bodytextnya = `➸ Judul: *${search.all[0].title}*\n➸ Penonton: *${search.all[0].views}*\n➸ Durasi: *${search.all[0].timestamp}*\n➸ Diupload: *${search.all[0].ago}*\n➸ Tautan: *${linknya}*`
             
                 
             let msg = generateWAMessageFromContent(from, {
@@ -4567,7 +4567,6 @@ break
   // MENU STORAGE ===============>>
 
  case 'addvideo':{
-if (!isOwner) return sendStickOwner()
 if (args.length < 1) return setReply('Anda belum memberikan saya nama file videonya')
 if (VideoMenhara.includes(q)) return setReply("Tidak dapat menambahkan video, karena nama tersebut sudah digunakan")
 let delb = await conn.downloadAndSaveMediaMessage(quoted)
@@ -4579,7 +4578,6 @@ setReply(`Success Adding Video\nCheck by typing ${prefix}listvideo`)
 }
 break
 case 'delvideo':{
-if (!isOwner) return sendStickOwner()
 if (args.length < 1) return setReply('Anda belum memberikan saya nama file videonya')
 if (!VideoMenhara.includes(q)) return setReply("Video tersebut tidak dapat ditemukan")
 let wanu = VideoMenhara.indexOf(q)
@@ -4589,17 +4587,36 @@ fs.unlinkSync(`./media/video/${q}.mp4`)
 setReply(`Success deleting video ${q}`)
 }
 break
-case 'listvideo':{
-let teks = '┌──⭓「 *Video List* 」\n│\n'
-for (let x of VideoMenhara) {
-teks += `│⭔ ${x}\n`
+case 'listvideo': {
+  let teksoooo = '✠ 𝐊𝐮𝐫𝐚𝐬𝐢 𝐕𝐢𝐝𝐞𝐨 ✠\n';
+  teksoooo += 'Dibawah adalah kurasi dari video yang ada di dalam database. Untuk melihat file yang diinginkan, kirimkan nama video tersebut\n\n';
+
+  for (let x of VideoMenhara) {
+      teksoooo += `➸ ${x}\n`;
+  }
+
+  teksoooo += `\n> © Nyth Zero - 2024`;
+
+  // Send the message with renderLargerThumbnail
+  conn.sendMessage(m.chat, {
+      text: teksoooo,
+      contextInfo: {
+          "externalAdReply": {
+              showAdAttribution: true,
+              renderLargerThumbnail: true,
+              title: `Catalyst Collective`,
+              body: `Jumlah Video: ${VideoMenhara.length}`,
+              mediaType: 1,
+              thumbnailUrl: 'https://pomf2.lain.la/f/oaxo9x92.jpg', 
+              sourceUrl: sgc 
+          }
+      }
+  }, { quoted: m });
+
+  break;
 }
-teks += `│\n└────────────⭓\n\n*Jumlah video: ${VideoMenhara.length}*`
-setReply(teks)
-}
-break
+
 case 'addimage':{
-if (!isOwner) return sendStickOwner()
 if (args.length < 1) return setReply('Anda belum memberikan saya nama gambarnya')
 if (ImageMenhara.includes(q)) return setReply("Tidak dapat menambahkan gambar, karena nama tersebut sudah digunakan")
 let delb = await conn.downloadAndSaveMediaMessage(quoted)
@@ -4611,7 +4628,6 @@ setReply(`Success Adding Image\nCheck by typing ${prefix}listimage`)
 }
 break
 case 'delimage':{
-if (!isOwner) return sendStickOwner()
 if (args.length < 1) return setReply('Anda belum memberikan saya nama gambarnya')
 if (!ImageMenhara.includes(q)) return setReply("Gambar tersebut tidak dapat ditemukan")
 let wanu = ImageMenhara.indexOf(q)
@@ -4621,17 +4637,38 @@ fs.unlinkSync(`./media/image/${q}.jpg`)
 setReply(`Success deleting image ${q}`)
 }
 break
-case 'listimage':{
-let teks = '┌──⭓「 *Image List* 」\n│\n'
-for (let x of ImageMenhara) {
-teks += `│⭔ ${x}\n`
+
+case 'listimage': {
+  let teksoooo = '✠ 𝐊𝐮𝐫𝐚𝐬𝐢 𝐆𝐚𝐦𝐛𝐚𝐫 ✠\n';
+  teksoooo += 'Dibawah adalah kurasi dari gambar yang ada di dalam database. Untuk melihat file yang diinginkan, kirimkan nama gambar tersebut\n\n';
+
+  for (let x of ImageMenhara) {
+      teksoooo += `➸ ${x}\n`;
+  }
+
+  teksoooo += `\n> © Nyth Zero - 2024`;
+
+  // Send the message with renderLargerThumbnail
+  conn.sendMessage(m.chat, {
+      text: teksoooo,
+      contextInfo: {
+          "externalAdReply": {
+              showAdAttribution: true,
+              renderLargerThumbnail: true,
+              title: `Catalyst Collective`,
+              body: `Jumlah Gambar: ${ImageMenhara.length}`,
+              mediaType: 1,
+              thumbnailUrl: 'https://pomf2.lain.la/f/oaxo9x92.jpg', // Change this URL to your own image if needed
+              sourceUrl: sgc // Replace this with a custom URL if needed
+          }
+      }
+  }, { quoted: m });
+
+  break;
 }
-teks += `│\n└────────────⭓\n\n*Jumlah gambar: ${ImageMenhara.length}*`
-setReply(teks)
-}
-break
+
+// add sticker
 case 'addsticker':{
-if (!isOwner) return sendStickOwner()
 if (args.length < 1) return setReply('Anda belum memberikan saya nama stikernya')
 if (StickerMenhara.includes(q)) return setReply("Tidak dapat menambahkan stiker, karena nama tersebut sudah digunakan")
 let delb = await conn.downloadAndSaveMediaMessage(quoted)
@@ -4643,7 +4680,6 @@ setReply(`Success Adding Sticker\nCheck by typing ${prefix}liststicker`)
 }
 break
 case 'delsticker':{
-if (!isOwner) return sendStickOwner()
 if (args.length < 1) return setReply('Anda belum memberikan saya nama stikernya')
 if (!StickerMenhara.includes(q)) return setReply("Nama tersebut tidak dapat ditemukan")
 let wanu = StickerMenhara.indexOf(q)
@@ -4664,7 +4700,6 @@ setReply(teks)
 break
 
 case 'addmsg': {
-	if (!isOwner) return sendStickOwner()
                 if (!m.quoted) return setReply('Balasan pesan yang ingin Anda simpan di database')
                 if (!text) return setReply(`Contoh: ${prefix + command} filename`)
                 let msgs = global.db.data.database
@@ -4695,7 +4730,6 @@ Lihat daftar pesan dengan perintah ${prefix}listmsg`)
 	    }
 	    break 
 	case 'delmsg': case 'deletemsg': {
-		if (!isOwner) return sendStickOwner()
 	        let msgs = global.db.data.database
 	        if (!(text.toLowerCase() in msgs)) return setReply(`'${text}' Pesan tersebut tidak dapat ditemukan`)
 		delete msgs[text.toLowerCase()]
@@ -4704,7 +4738,6 @@ setReply(`Successfully deleted '${text}' from the message list`)
 	    break
 
 case 'addvn':{
-if (!isOwner) return sendStickOwner()
 if (args.length < 1) return setReply('Anda belum memberikan saya nama file vn nya')
 if (VnMenhara.includes(q)) return setReply("Tidak dapat menambahkan vn, karena nama tersebut sudah digunakan")
 let delb = await conn.downloadAndSaveMediaMessage(quoted)
@@ -4716,7 +4749,6 @@ setReply(`Success Adding Audio\nCheck by typing ${prefix}listvn`)
 }
 break
 case 'delvn':{
-if (!isOwner) return sendStickOwner()
 if (args.length < 1) return setReply('Anda belum memberikan saya nama file vn nya')
 if (!VnMenhara.includes(q)) return setReply("File tersebut tidak dapat ditemukan")
 let wanu = VnMenhara.indexOf(q)
@@ -4736,7 +4768,6 @@ setReply(teks)
 }
 break
 case 'addzip':{
-if (!isOwner) return sendStickOwner()
 
 if (args.length < 1) return setReply(`Anda belum memberikan saya nama file .zip nya`)
 let teks = `${text}`
@@ -4752,8 +4783,6 @@ setReply(`Success Adding zip\nTo check type ${prefix}listzip`)
 }
 break
 case 'delzip':{
-if (!isOwner) return sendStickOwner()
-
 if (args.length < 1) return setReply('Anda belum memberikan saya nama file .zip nya')
 let teks = `${text}`
 {
@@ -4777,7 +4806,6 @@ setReply(teksooooo)
 }
 break
 case 'addapk':{
-if (!isOwner) return sendStickOwner()
 
 if (args.length < 1) return setReply('Anda belum memberikan saya nama file .apk nya')
 let teks = `${text}`
@@ -4793,7 +4821,6 @@ setReply(`Successful Adding apk\nTo Check type ${prefix}listapk`)
 }
 break
 case 'delapk':{
-if (!isOwner) return sendStickOwner()
 
 if (args.length < 1) return setReply('Anda belum memberikan saya nama file .apk nya')
 let teks = `${text}`
@@ -4817,47 +4844,106 @@ teksoooooo += `│\n└────────────⭓\n\n*Total : ${Apk
 setReply(teksoooooo)
 }
 break
-case 'addpdf':{
-if (!isOwner) return sendStickOwner()
 
-if (args.length < 1) return setReply('Anda belum memberikan saya nama file .pdf nya')
-let teks = `${teks}`
-{
-if (DocMenhara.includes(teks)) return setReply("Tidak dapat menambahkan .pdf, karena nama tersebut sudah digunakan")
-let delb = await conn.downloadAndSaveMediaMessage(quoted)
-DocMenhara.push(teks)
-await fsx.copy(delb, `./media/doc/${teks}.pdf`)
-fs.writeFileSync('./json/doc.json', JSON.stringify(DocMenhara))
-fs.unlinkSync(delb)
-setReply(`Successful Adding Pdf\nTo check type ${prefix}listpdf`)
-}
-}
-break
-case 'delpdf':{
-if (!isOwner) return sendStickOwner()
+//add pdf
+case 'addpdf': {
 
-if (args.length < 1) return setReply('Berikan saya nama filenya!')
-let teks = `${text}`
-{
-if (!DocMenhara.includes(teks)) return setReply("File tersebut tidak dapat ditemukan")
-let wanu = DocMenhara.indexOf(teks)
-DocMenhara.splice(wanu, 1)
-fs.writeFileSync('./json/doc.json', JSON.stringify(DocMenhara))
-fs.unlinkSync(`./media/doc/${teks}.pdf`)
-setReply(`Successfully deleted pdf ${teks}`)
+  // Ensure the user provides a name for the PDF file
+  if (args.length < 1) return setReply('Anda belum memberikan saya nama file .pdf nya');
+
+  let pdfName = args.join(' '); // Join arguments to get the full name of the PDF
+
+  // Check if the PDF name already exists in DocMenhara
+  if (DocMenhara.includes(pdfName)) return setReply("Tidak dapat menambahkan .pdf, karena nama tersebut sudah digunakan");
+
+  try {
+      // Ensure there is a quoted message with a PDF attached
+      if (!quoted || !quoted.message || !quoted.message.documentMessage || quoted.message.documentMessage.mimetype !== 'application/pdf') {
+          return setReply('Harap kutip pesan yang berisi file PDF valid untuk ditambahkan.');
+      }
+
+      // Download the PDF file from the quoted message
+      const savedFilePath = await conn.downloadAndSaveMediaMessage(quoted, `./media/doc/${pdfName}.pdf`);
+
+      // Add the new PDF name to the DocMenhara list
+      DocMenhara.push(pdfName);
+
+      // Save the updated DocMenhara list to the JSON file
+      fs.writeFileSync('./json/doc.json', JSON.stringify(DocMenhara));
+
+      // Send confirmation message
+      setReply(`Berhasil menambahkan PDF dengan nama *${pdfName}*\nUntuk melihat daftar PDF, ketik ${prefix}listpdf`);
+  } catch (err) {
+      console.error(err); // Log the error for debugging
+      setReply("Terjadi kesalahan saat menambahkan PDF. Pastikan file yang dikutip adalah PDF valid.");
+  }
 }
+break;
+
+
+
+case 'delpdf': {
+  if (!isOwner) return sendStickOwner(); // Only the owner can delete PDF files
+
+  // Check if the PDF name is provided
+  if (args.length < 1) return setReply('🔴 Error! Anda belum memberikan saya nama pdf-nya');
+
+  let teks = args.join(' '); // Get the name of the PDF file to delete
+
+  // Check if the file exists in the list
+  if (!DocMenhara.includes(teks)) return setReply("File tersebut tidak dapat ditemukan");
+
+  try {
+      // Remove the PDF from the DocMenhara list
+      let wanu = DocMenhara.indexOf(teks);
+      DocMenhara.splice(wanu, 1);
+
+      // Save the updated list to the JSON file
+      fs.writeFileSync('./json/doc.json', JSON.stringify(DocMenhara));
+
+      // Delete the actual PDF file from the media/doc directory
+      fs.unlinkSync(`./media/doc/${teks}.pdf`);
+
+      // Send a confirmation message
+      setReply(`Successfully deleted PDF ${teks}`);
+  } catch (err) {
+      console.error(err); // Log the error
+      setReply("An error occurred while deleting the PDF.");
+  }
 }
-break
+break;
+
 case 'listpdf': {
+  let teksoooo = '✠ 𝐊𝐮𝐫𝐚𝐬𝐢 𝐏𝐃𝐅 ✠\n';
+  teksoooo += 'Dibawah adalah kurasi dari file pdf yang ada di dalam database. Untuk melihat file yang diinginkan, kirimkan nama file pdf tersebut\n\n';
 
-let teksoooo = '┌──⭓「 *PDF LIST* 」\n│\n'
-for (let x of DocMenhara) {
-teksoooo += `│⭔ ${x}\n`
+  // Loop through the DocMenhara array and list the PDF files
+  for (let x of DocMenhara) {
+      teksoooo += `➸ ${x}\n`;
+  }
+
+  teksoooo += `\n> © Nyth Zero - 2024`;
+
+  // Send the message with renderLargerThumbnail
+  conn.sendMessage(m.chat, {
+      text: teksoooo,
+      contextInfo: {
+          "externalAdReply": {
+              showAdAttribution: true,
+              renderLargerThumbnail: true,
+              title: `Catalyst Collective`,
+              body: `Jumlah PDF: ${DocMenhara.length}`,
+              mediaType: 1,
+              thumbnailUrl: 'https://pomf2.lain.la/f/oaxo9x92.jpg', // Change this URL to your own image if needed
+              sourceUrl: sgc // Replace this with a custom URL if needed
+          }
+      }
+  }, { quoted: m });
+
+  break;
 }
-teksoooo += `│\n└────────────⭓\n\n*Total : ${DocMenhara.length}*`
-setReply(teksoooo)
-}
-break
+
+
 
  // MENU SETTINGS==============>>
  case 'setppbot':
