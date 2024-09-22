@@ -1,0 +1,100 @@
+{
+    "courses": [
+        {
+            "courseId": "033",
+            "courseName": "Hukum dan Etika Jurnalistik",
+            "day": "Monday",
+            "startTime": "07:50",
+            "endTime": "09:30",
+            "teacher": "Dr. H., Samsul Munir, M.A."
+        },
+        {
+            "courseId": "005",
+            "courseName": "Fiqh Al Dakwah",
+            "day": "Monday",
+            "startTime": "09:30",
+            "endTime": "11:10",
+            "teacher": "Reny Atika Asya'roni, S.Sos.,M.Sos"
+        },
+        {
+            "courseId": "018",
+            "courseName": "Komunikasi Politik",
+            "day": "Monday",
+            "startTime": "13:00",
+            "endTime": "14:40",
+            "teacher": "Ahmad Anwar, MA., LL.M."
+        },
+        {
+            "courseId": "004",
+            "courseName": "Ulumul Qur'an",
+            "day": "Monday",
+            "startTime": "14:40",
+            "endTime": "16:20",
+            "teacher": "Siti Robiah Adawiyah, Alhz., S.Sos."
+        },
+        {
+            "courseId": "009",
+            "courseName": "Tafsir Ayat-ayat Dakwah",
+            "day": "Tuesday",
+            "startTime": "07:50",
+            "endTime": "09:30",
+            "teacher": "Dr. Samsurrohman, Alh., S. Ag., M."
+        },
+        {
+            "courseId": "006",
+            "courseName": "Qiro'ah Sab'ah",
+            "day": "Tuesday",
+            "startTime": "09:30",
+            "endTime": "11:10",
+            "teacher": "Dr. H., Ahsin Wijaya, Alh., M. Ag"
+        },
+        {
+            "courseId": "019",
+            "courseName": "Komunikasi Publik dan Massa",
+            "day": "Tuesday",
+            "startTime": "13:00",
+            "endTime": "14:40",
+            "teacher": "Sri Rahayu, S.Sos., M.I.Kom"
+        },
+        {
+            "courseId": "013",
+            "courseName": "Retorika Dakwah",
+            "day": "Tuesday",
+            "startTime": "14:40",
+            "endTime": "16:20",
+            "teacher": "Drs. H., Yudino., M.Pd.I"
+        },
+        {
+            "courseId": "007",
+            "courseName": "Studi Pesantren",
+            "day": "Wednesday",
+            "startTime": "07:50",
+            "endTime": "09:30",
+            "teacher": "Siti Robiah Adawiyah, Alhz., S.Sos."
+        },
+        {
+            "courseId": "025",
+            "courseName": "Metodologi Penelitian Sosial",
+            "day": "Wednesday",
+            "startTime": "09:30",
+            "endTime": "11:10",
+            "teacher": "Drs., Moh. Amin., M.Pd.I"
+        },
+        {
+            "courseId": "024",
+            "courseName": "Studi Agama Kontemporer",
+            "day": "Wednesday",
+            "startTime": "13:00",
+            "endTime": "14:40",
+            "teacher": "Muhammad Yusuf, S.Sos., M.Ag"
+        },
+        {
+            "courseId": "027",
+            "courseName": "Analisis Teks Media",
+            "day": "Wednesday",
+            "startTime": "14:40",
+            "endTime": "16:20",
+            "teacher": "Supartinah, S.Pd.,M.I.Kom."
+        }
+    ]
+}
