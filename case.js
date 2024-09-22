@@ -861,7 +861,7 @@ if (db.data.chats[m.chat].antipromotion) {
 if (budy.match(`instagram booster|tiktok booster|ml booster|bgmi selling|selling uc|selling diamonds|selling coin|selling id|selling account|selling ids|buy account|sell account|buy id|sell id|instagram followers|tiktok followers|buy panel|sell panel|sell bug bot|buy bug bot|buy bot bug|sell bot bug|adminpanel5kpm|open jasa push member grup|yangmaubuypanelpm|admin panel 10k pm|Hanya menyediakan Jasa Push Member Grup|admin panel 5k pm|yang mau beli panel murah pm|list harga panel by|list harga vps|LIST HARGA VPS|OPEN JASA PUSH MEMBER GRUP|READY|Redy|LIST HARGA PANEL BY|list harga panel|menyediakan|MENYEDIAKAN|OPEN MURBUG|open|OPEN|PANEL READY|PANEL|PANNEL READY|panel|panel ready|pannel ready minat pm|mau panel pm|MAU PANNEL PM|Admin panel ready|ADMIN PANEL READY|Chat aja om ready selalu|OPEN JASA INSTALL|open jasa installMENYEDIAKAN JASA INSTALL|menyediakan jasa install`)) {
 if (!isBotAdmins) return
 if(isOwner) return
-if (isAdmins) return
+if (isAdmins) returnn
 conn.sendMessage(m.chat,
 			    {
 			        delete: {
@@ -7139,6 +7139,246 @@ case "jadwalkelas": {
 
     break;
 }
+
+
+// Membuat Kelompok ==========>>
+
+case 'mkgroup': {
+    if (args.length < 3) return setReply(`Teknis Penggunan: ${prefix}mkgroup [ID matkul] [s atau g] [value]\n\n> mkgroup 033 g 4\nUntuk membuat kelompok dengan total 4 kelompok\n\n>mkgroup 033 s 5\nUntuk membuat kelompok dengan total 5 orang dalam satu kelompok`);
+
+    const path = './database/groups.json';
+
+const students = JSON.parse(fs.readFileSync('./database/dbmhs.json', 'utf8'));
+const courses = JSON.parse(fs.readFileSync('./database/dbjadwal.json', 'utf8'));
+
+let groups = fs.existsSync(path) ? JSON.parse(fs.readFileSync(path, 'utf8')) : [];
+
+// Function to generate group ID based on the courseID and existing groups
+function generateGroupId(courseID) {
+    let groupCount = groups.filter(g => g.courseID === courseID).length;
+    return `g${courseID}${groupCount + 1}`;
+}
+
+    const courseID = args[0];
+    const mode = args[1];
+    const value = parseInt(args[2]);
+
+    // Validate the course ID
+    const course = courses.courses.find(c => c.courseId === courseID);
+    if (!course) return setReply('🔴 Error!\nTidak ada mata kuliah dengan ID tersebut!\n\nKirimkan perintah\`listjadwal`untuk melihat mata kuliah dengan ID-nya.');
+
+    // Check the mode (s or g)
+    if (!['s', 'g'].includes(mode)) return setReply('🔴 Error!\nGunakan "s" untuk jumlah orang dalam satu grub, atau "g" untuk jumlah keseluruhan grub.');
+
+    // Get the list of students
+    let studentList = [...students]; // Copy the student list
+    const totalStudents = studentList.length;
+    
+    // Initialize groups array
+    let totalGroups = 0;
+    let studentsPerGroup = 0;
+    
+    if (mode === 's') {
+        // Mode: s (Students per group)
+        studentsPerGroup = value;
+        totalGroups = Math.floor(totalStudents / studentsPerGroup);
+    } else if (mode === 'g') {
+        // Mode: g (Number of groups)
+        totalGroups = value;
+        studentsPerGroup = Math.floor(totalStudents / totalGroups);
+    }
+
+    let remainingStudents = totalStudents % (mode === 's' ? studentsPerGroup : totalGroups);
+
+    // Shuffle the student list to randomize group assignment
+    studentList.sort(() => Math.random() - 0.5);
+
+    // Distribute students into groups
+    let groupData = [];
+    for (let i = 0; i < totalGroups; i++) {
+        groupData.push({
+            groupId: i + 1,
+            students: studentList.splice(0, studentsPerGroup)
+        });
+    }
+
+    // If there are remaining students, distribute them into the groups
+    if (remainingStudents > 0) {
+        if (remainingStudents < studentsPerGroup) {
+            // Create a smaller group with the remaining students if they're close to a full group
+            groupData.push({
+                groupId: totalGroups + 1,
+                students: studentList.splice(0, remainingStudents)
+            });
+        } else {
+            // Randomly assign the remaining students to existing groups
+            while (studentList.length > 0) {
+                let randomGroup = Math.floor(Math.random() * totalGroups);
+                groupData[randomGroup].students.push(studentList.shift());
+            }
+        }
+    }
+
+    // Generate the unique group ID
+    const groupId = generateGroupId(courseID);
+
+    // Save the group in the groups database
+    let newGroup = {
+        groupId: groupId,
+        courseID: courseID,
+        courseName: course.courseName,
+        totalGroups: groupData.length,
+        studentsPerGroup: studentsPerGroup,
+        creationDate: new Date().toISOString().split('T')[0], // Only date
+        groups: groupData
+    };
+    groups.push(newGroup);
+
+    // Save the updated group list to the JSON file
+    fs.writeFileSync(path, JSON.stringify(groups, null, 2));
+
+    // Prepare the success message
+    let message = `✅ *Kelompok ${course.courseName} telah berhasil dibentuk*\n\n`;
+    message += `➸ Id Kelompok: ${groupId}\n`;
+    message += `➸ Total Kelompok: ${groupData.length}\n`;
+    message += `➸ Jumlah Orang: ${studentsPerGroup}\n`;
+    message += `➸ Tanggal Dibentuk: ${newGroup.creationDate}\n\n`;
+
+    groupData.forEach((g, i) => {
+        message += `Kelompok ${i + 1}:\n`;
+        g.students.forEach((s, j) => {
+            message += `${j + 1}. ${s.name}\n`;
+        });
+        message += '\n';
+    });
+
+    // Send the success message
+    setReply(message);
+}
+break;
+
+// List Kelompok
+
+case 'grouplist': case 'listkelompok': {
+  const path = './database/groups.json';
+
+  // Check if the groups database exists
+  if (!fs.existsSync(path)) return setReply('Belum ada kelompok yang terbentuk.');
+
+  // Load the groups from the database
+  const groups = JSON.parse(fs.readFileSync(path, 'utf8'));
+
+  // Check if there are any groups
+  if (groups.length === 0) return setReply('Belum ada kelompok yang terbentuk.');
+
+  // Prepare the group list message
+  let message = '✠ 𝐊𝐮𝐫𝐚𝐬𝐢 𝐊𝐞𝐥𝐨𝐦𝐩𝐨𝐤 ✠\n\n';
+  groups.forEach((group, index) => {
+      message += `${index + 1}. ➸ Kelompok ${group.groupId} | ${group.courseName}\n`;
+  });
+
+  // Send the group list message
+  conn.sendMessage(m.chat, {
+    text: message,
+    contextInfo: {
+        "externalAdReply": {
+            showAdAttribution: true,
+            renderLargerThumbnail: true,
+            title: `Catalyst Collective`,
+            body: `Total Kelompok: ${groups.length}`,
+            mediaType: 1,
+            thumbnailUrl: 'https://pomf2.lain.la/f/oaxo9x92.jpg', // You can change this URL to a valid image
+            sourceUrl: sgc // You can replace this with a custom URL
+        }
+    }
+}, { quoted: m });
+}
+break;
+
+// Logika untuk melihat informasi kelompok
+
+case 's': {
+  const path = './database/groups.json';
+
+  // Check if the group ID is provided
+  if (args.length < 1) return setReply('Harap berikan ID kelompok, contoh: s g0331');
+
+  const groupId = args[0];
+
+  // Check if the groups database exists
+  if (!fs.existsSync(path)) return setReply('Belum ada kelompok yang terbentuk.');
+
+  // Load the groups from the database
+  const groups = JSON.parse(fs.readFileSync(path, 'utf8'));
+
+  // Find the group with the provided groupId
+  const group = groups.find(g => g.groupId === groupId);
+  if (!group) return setReply(`Kelompok dengan ID ${groupId} tidak ditemukan.`);
+
+  // Prepare the group details message
+  let message = `Kelompok ${group.courseName}\n\n`;
+  message += `➸ Id Kelompok: ${group.groupId}\n`;
+  message += `➸ Total Kelompok: ${group.totalGroups}\n`;
+  message += `➸ Jumlah Orang: ${group.studentsPerGroup}\n`;
+  message += `➸ Tanggal Dibentuk: ${group.creationDate}\n\n`;
+
+  group.groups.forEach((g, i) => {
+      message += `Kelompok ${i + 1}:\n`;
+      g.students.forEach((s, j) => {
+          message += `${j + 1}. ${s.name}\n`;
+      });
+      message += '\n';
+  });
+
+  // Send the group details message
+  conn.sendMessage(m.chat, {
+    text: message,
+    contextInfo: {
+        "externalAdReply": {
+            showAdAttribution: true,
+            renderLargerThumbnail: true,
+            title: `Kelompok ${group.courseName}`,
+            body: `Detail kelompok lebih lanjut`,
+            mediaType: 1,
+            thumbnailUrl: 'https://pomf2.lain.la/f/oaxo9x92.jpg', // You can change this URL to a valid image
+            sourceUrl: sgc // You can replace this with a custom URL
+        }
+    }
+}, { quoted: m });
+}
+break;
+
+// Menghapus kelompok
+case 'rmgroup': {
+  const path = './database/groups.json';
+
+  // Check if the group ID is provided
+  if (args.length < 1) return setReply('Harap berikan ID kelompok yang ingin dihapus, contoh: rmgroup g0331');
+
+  const groupId = args[0];
+
+  // Check if the groups database exists
+  if (!fs.existsSync(path)) return setReply('Belum ada kelompok yang terbentuk.');
+
+  // Load the groups from the database
+  let groups = JSON.parse(fs.readFileSync(path, 'utf8'));
+
+  // Find the index of the group with the provided groupId
+  const groupIndex = groups.findIndex(g => g.groupId === groupId);
+  if (groupIndex === -1) return setReply(`Kelompok dengan ID ${groupId} tidak ditemukan.`);
+
+  // Remove the group from the array
+  groups.splice(groupIndex, 1);
+
+  // Save the updated groups list to the database
+  fs.writeFileSync(path, JSON.stringify(groups, null, 2));
+
+  // Send confirmation message
+  setReply(`Kelompok dengan ID ${groupId} telah berhasil dihapus.`);
+}
+break;
+
+
 
 // BATAS ==============>>
             default:
