@@ -3227,6 +3227,28 @@
       "antitoxic": false,
       "antipromotion": false,
       "antilinkgc": false
+    },
+    "120363146621069786@g.us": {
+      "name": "The Next Geeg Think",
+      "badword": false,
+      "antiforeignnum": false,
+      "antibot": false,
+      "antiviewonce": false,
+      "antispam": false,
+      "antivirtex": false,
+      "antimedia": false,
+      "antiimage": false,
+      "antivideo": false,
+      "antiaudio": false,
+      "antipoll": false,
+      "antisticker": false,
+      "antilocation": false,
+      "antidocument": false,
+      "anticontact": false,
+      "antilink": false,
+      "antitoxic": false,
+      "antipromotion": false,
+      "antilinkgc": false
     }
   },
   "settings": {
@@ -3262,7 +3284,7 @@
       }
     },
     "6285231390730@s.whatsapp.net": {
-      "totalhit": 6,
+      "totalhit": 14,
       "totalError": 0,
       "online": false,
       "autosticker": false,

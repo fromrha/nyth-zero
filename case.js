@@ -48,7 +48,6 @@ const { addPremiumUser, getPremiumExpired, getPremiumPosition,expiredPremiumChec
 //store
 const { addResponList,delResponList,isAlreadyResponList, isAlreadyResponListGroup,sendResponList,updateResponList, getDataResponList  } = require('./lib/list')
 //data
-let ntnsfw = JSON.parse(fs.readFileSync('./json/nsfw.json'))
 let bad = JSON.parse(fs.readFileSync('./json/badword.json'))
 let premium = JSON.parse(fs.readFileSync('./database/premium.json'))
 const owner = JSON.parse(fs.readFileSync('./database/owner.json'))
@@ -175,7 +174,6 @@ const { type,quotedMsg, mentioned,now,fromMe } = m
         const isAdmins = m.isGroup ? groupAdmins.includes(m.sender) : false
         const groupOwner = m.isGroup ? groupMetadata.owner : ''
         const isGroupOwner = m.isGroup ? (groupOwner ? groupOwner : groupAdmins).includes(m.sender) : false
-        const AntiNsfw = m.isGroup ? ntnsfw.includes(from) : false
         //anti media
         const isHanMedia = m.mtype
         //user status
