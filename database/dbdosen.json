@@ -1,0 +1,81 @@
+{
+    "lecturers": [
+      {
+        "id": 186,
+        "name": "Dr. H., Samsul Munir, M.A.",
+        "courses": ["Hukum dan Etika Jurnalistik"],
+        "phone": "6281328084159",
+        "email": "samsulmunir@unsiq.ac.id"
+      },
+      {
+        "id": 622,
+        "name": "Reny Atika Asya'roni., S.Sos.,M.Sos",
+        "courses": ["Fiqh Al Dakwah"],
+        "phone": "6285727317864",
+        "email": ""
+      },
+      {
+        "id": 318,
+        "name": "Ahmad Anwar., MA., LL.M.",
+        "courses": ["Komunikasi Politik"],
+        "phone": "6285227100127",
+        "email": "aan.pop@gmail.com"
+      },
+      {
+        "id": 195,
+        "name": "Siti Robiah Adawiyah., Alhz., S.Sos.I., M.S",
+        "courses": ["Ulumul Qur'an", "Studi Pesantren"],
+        "phone": "6282223264395",
+        "email": "sitirobiah@unsiq.ac.id"
+      },
+      {
+        "id": 187,
+        "name": "Dr. Samsurrohman., Alh., S. Ag., M.S.I",
+        "courses": ["Tafsir Ayat-ayat Dakwah"],
+        "phone": "6285786773771",
+        "email": "samsurrohman16@gmail.com"
+      },
+      {
+        "id": 15,
+        "name": "Dr. H., Ahsin Wijaya., Alh., M. Ag",
+        "courses": ["Qiro'ah Sab'ah"],
+        "phone": "",
+        "email": "ahsinwijaya@yahoo.co.id"
+      },
+      {
+        "id": 523,
+        "name": "Sri Rahayu., S.Sos., M.I.Kom",
+        "courses": ["Komunikasi Publik dan Massa"],
+        "phone": "6285600063526",
+        "email": ""
+      },
+      {
+        "id": 235,
+        "name": "Drs. H., Yudino., M.Pd.I",
+        "courses": ["Retorika Dakwah"],
+        "phone": "6287702312759",
+        "email": "yudinomaskuri@gmail.com"
+      },
+      {
+        "id": 133,
+        "name": "Drs., Moh. Amin., M.Pd.I",
+        "courses": ["Metodologi Penelitian Sosial"],
+        "phone": "6281380301924",
+        "email": "mohamin@unsiq.ac.id"
+      },
+      {
+        "id": 560,
+        "name": "Muhammad Yusuf., S.Sos., M.Ag",
+        "courses": ["Studi Agama Kontemporer"],
+        "phone": "6281225938685",
+        "email": ""
+      },
+      {
+        "id": 280,
+        "name": "Supartinah., S.Pd.,M.I.Kom.",
+        "courses": ["Analisis Teks Media"],
+        "phone": "6285327298084",
+        "email": "kaisa16syakila@gmail.com"
+      }
+    ]
+  }
