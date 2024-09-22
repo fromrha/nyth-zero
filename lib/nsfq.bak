@@ -1,0 +1,100 @@
+ // NSSFW =====================>>
+ case 'hentaivid': case 'hentaivideo': {
+	if (!m.isGroup) return sendStickGroup()
+if (!AntiNsfw) return m.reply(mess.nsfw)
+                await sendStickAwait()
+                const { hentai } = require('./lib/scraper.js')
+                anu = await hentai()
+                result912 = anu[Math.floor(Math.random(), anu.length)]
+                conn.sendMessage(m.chat, { video: { url: result912.video_1 }, caption: `${themeemoji} Title : ${result912.title}\n${themeemoji} Category : ${result912.category}\n${themeemoji} Mimetype : ${result912.type}\n${themeemoji} Views : ${result912.views_count}\n${themeemoji} Shares : ${result912.share_count}\n${themeemoji} Source : ${result912.link}\n${themeemoji} Media Url : ${result912.video_1}` }, { quoted: m })
+            }
+            break
+case 'trap' :
+if (!m.isGroup) return sendStickGroup()
+if (!AntiNsfw) return setReply(mess.nsfw)
+await setReply(mess.wait)
+ let trap = await axios.get(`https://waifu.pics/api/nsfw/${command}`)       
+conn.sendMessage(m.chat, { caption: mess.success, image: { url:trap.data.url } }, { quoted: m })
+break
+case 'hentai-neko' :
+case 'hneko' :
+if (!m.isGroup) return sendStickGroup()
+if (!AntiNsfw) return setReply(mess.nsfw)
+   let hneko = await axios.get(`https://waifu.pics/api/nsfw/neko`)
+conn.sendMessage(m.chat, { caption: mess.success, image: { url:hneko.data.url } }, { quoted: m })
+break
+case 'hentai-waifu' :
+case 'nwaifu' :
+if (!m.isGroup) return sendStickGroup()
+if (!AntiNsfw) return setReply(mess.nsfw)
+await setReply(mess.wait)
+   let waifudd = await axios.get(`https://waifu.pics/api/nsfw/waifu`)         
+conn.sendMessage(m.chat, { caption: mess.success, image: { url:waifudd.data.url } }, { quoted: m })
+break
+case 'animespank':
+if (!m.isGroup) return sendStickGroup()
+if (!AntiNsfw) return m.reply(mess.nsfw)
+await setReply(mess.wait)
+ waifudd = await axios.get(`https://nekos.life/api/v2/img/spank`)     
+            await conn.sendMessage(m.chat, { caption:  `Here you go!`, image: {url:waifudd.data.url} },{ quoted:m }).catch(err => {
+                    return('Error!')
+                })
+break
+case 'blowjob':
+if (!m.isGroup) return sendStickGroup()
+	if (!AntiNsfw) return m.reply(mess.nsfw)
+await setReply(mess.wait)
+var ahegaonsfw = JSON.parse(fs.readFileSync('./src/media/nsfw/blowjob.json'))
+var xeonyresult = pickRandom(ahegaonsfw)
+conn.sendMessage(m.chat, { caption: mess.success, image: { url: xeonyresult.url } }, { quoted: m })
+break
+case 'cuckold':
+if (!m.isGroup) return sendStickGroup()
+	if (!AntiNsfw) return m.reply(mess.nsfw)
+await setReply(mess.wait)
+var ahegaonsfw = JSON.parse(fs.readFileSync('./src/media/nsfw/cuckold.json'))
+var xeonyresult = pickRandom(ahegaonsfw)
+conn.sendMessage(m.chat, { caption: mess.success, image: { url: xeonyresult.url } }, { quoted: m })
+break
+case 'eba':
+if (!m.isGroup) return sendStickGroup()
+	if (!AntiNsfw) return m.reply(mess.nsfw)
+await setReply(mess.wait)
+var ahegaonsfw = JSON.parse(fs.readFileSync('./src/media/nsfw/eba.json'))
+var xeonyresult = pickRandom(ahegaonsfw)
+conn.sendMessage(m.chat, { caption: mess.success, image: { url: xeonyresult.url } }, { quoted: m })
+break
+case 'pussy':
+if (!m.isGroup) return sendStickGroup()
+	if (!AntiNsfw) return m.reply(mess.nsfw)
+await setReply(mess.wait)
+var ahegaonsfw = JSON.parse(fs.readFileSync('./src/media/nsfw/pussy.json'))
+var xeonyresult = pickRandom(ahegaonsfw)
+conn.sendMessage(m.chat, { caption: mess.success, image: { url: xeonyresult.url } }, { quoted: m })
+break
+case 'yuri':
+if (!m.isGroup) return sendStickGroup()
+	if (!AntiNsfw) return m.reply(mess.nsfw)
+await setReply(mess.wait)
+var ahegaonsfw = JSON.parse(fs.readFileSync('./src/media/nsfw/yuri.json'))
+var xeonyresult = pickRandom(ahegaonsfw)
+conn.sendMessage(m.chat, { caption: mess.success, image: { url: xeonyresult.url } }, { quoted: m })
+break
+case 'zettai':
+if (!m.isGroup) return sendStickGroup()
+	if (!AntiNsfw) return m.reply(mess.nsfw)
+await setReply(mess.wait)
+var ahegaonsfw = JSON.parse(fs.readFileSync('./src/media/nsfw/zettai.json'))
+var xeonyresult = pickRandom(ahegaonsfw)
+conn.sendMessage(m.chat, { caption: mess.success, image: { url: xeonyresult.url } }, { quoted: m })
+break
+case 'gifblowjob':
+if (!m.isGroup) return sendStickGroup()
+if (!AntiNsfw) return m.reply(mess.nsfw)
+await setReply(mess.wait)
+  let assss = await axios.get ("https://api.waifu.pics/nsfw/blowjob")
+    var bobuff = await fetchBuffer(assss.data.url)
+    var bogif = await buffergif(bobuff)
+    await conn.sendMessage(m.chat,{video:bogif, gifPlayback:true },{quoted:m}).catch(err => {
+    })
+    break
