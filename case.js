@@ -330,6 +330,7 @@ return conn.sendMessage(from, xeonnewrep, {
 quoted: m,
 })
 }
+
       
 // jsjsjsj
         async function setReply(teks) {
@@ -560,7 +561,7 @@ conn.sendMessage(m.chat,{contextInfo, text:teks},{quoted:m}) */
                   antilink: false,
                   antitoxic: false,
                   antipromotion: false,
-                  antilinkgc: false
+                  antilinkgc: false,
                }
             
             let setting = global.db.data.settings[botNumber]
@@ -635,7 +636,6 @@ conn.sendMessage(m.chat,{contextInfo, text:teks},{quoted:m}) */
     throw error
   }
 }        
-        
 
 // AUTO SHOLAT 
 conn.autoshalat = conn.autoshalat ? conn.autoshalat : {}
@@ -743,8 +743,203 @@ setReply(`${err}`)
 }
 }
 
+// Remmatkul
 
-        
+const activeCronJobs = {};
+
+// Function to send reminder messages to the group
+function sendReminder(groupId, courseName) {
+    const message = `Bersiaplah untuk mata kuliah ${courseName} yang akan dimulai 5 menit lagi.\n\n> Nyth Zero 2024`;
+
+  //   conn.sendMessage(m.chat, {
+  //     text: message,
+  //     contextInfo: {
+  //         "externalAdReply": {
+  //             showAdAttribution: true,
+  //             renderLargerThumbnail: true,
+  //             title: `PENGUMUMAN`,
+  //             body: `Pergantian Jadwal Pembelajaran`,
+  //             mediaType: 1,
+  //             thumbnailUrl: 'https://pomf2.lain.la/f/oaxo9x92.jpg', // You can change this URL to a valid image
+  //             sourceUrl: sgc // You can replace this with a custom URL
+  //         }
+  //     }
+  // }, { quoted: m });
+    conn.sendMessage(groupId, { text: message });
+}
+
+// Clear existing cron jobs for a specific group
+const clearCronJobs = (groupId) => {
+    if (activeCronJobs[groupId]) {
+        // Stop all cron jobs for the group if they exist
+        activeCronJobs[groupId].forEach(job => job.stop());
+        activeCronJobs[groupId] = []; // Reset the list of jobs for the group
+    }
+};
+
+// Set up cron jobs based on the course schedule in dbjadwal.json for a specific group
+const setupCourseReminders = (groupId) => {
+    const chats = global.db.data.chats[groupId];
+    const dbJadwal = JSON.parse(fs.readFileSync('./database/dbjadwal.json', 'utf8'));
+
+    if (!chats || !chats.remmatkul) {
+        console.log(`Fitur ini belum di aktifkan di grub ${groupId}`);
+        return;
+    }
+
+    clearCronJobs(groupId); // Ensure we don't have duplicate jobs
+
+    dbJadwal.courses.forEach(course => {
+        // Convert day name to the corresponding cron day format
+        let cronDay;
+        switch (course.day.toLowerCase()) {
+            case 'monday': cronDay = 1; break;
+            case 'tuesday': cronDay = 2; break;
+            case 'wednesday': cronDay = 3; break;
+            default: return; // Skip if it's not Monday, Tuesday, or Wednesday
+        }
+
+        // Calculate 5 minutes before the course's startTime
+        const courseStartTime = moment(course.startTime, 'HH:mm');
+        const reminderTime = courseStartTime.subtract(5, 'minutes');
+        const reminderHour = reminderTime.format('HH'); // Get the hour (in 24-hour format)
+        const reminderMinute = reminderTime.format('mm'); // Get the minute
+
+        // Create a cron schedule for the reminder
+        const job = cron.schedule(`${reminderMinute} ${reminderHour} * * ${cronDay}`, () => {
+            if (chats.remmatkul) {
+                sendReminder(groupId, course.courseName); // Send reminder to the group
+            }
+        });
+
+        // Store the job in the activeCronJobs object for this group
+        if (!activeCronJobs[groupId]) {
+            activeCronJobs[groupId] = [];
+        }
+        activeCronJobs[groupId].push(job);
+    });
+};
+
+// rempresensi
+const activeAttendanceCronJobs = {};
+
+// Function to send attendance reminder messages to the group
+function sendAttendanceReminder(groupId, courseName) {
+    const message = `Mata kuliah ${courseName} akan berakhir dalam 10 menit lagi, silakan manfaatkan kesempatan ini untuk melakukan presensi!`;
+    conn.sendMessage(groupId, { text: message });
+}
+
+// Clear existing cron jobs for attendance reminders for a specific group
+const clearAttendanceCronJobs = (groupId) => {
+    if (activeAttendanceCronJobs[groupId]) {
+        // Stop all cron jobs for the group if they exist
+        activeAttendanceCronJobs[groupId].forEach(job => job.stop());
+        activeAttendanceCronJobs[groupId] = []; // Reset the list of jobs for the group
+    }
+};
+
+// Set up cron jobs based on the course schedule in dbjadwal.json for a specific group
+const setupAttendanceReminders = (groupId) => {
+    const chats = global.db.data.chats[groupId];
+    const dbJadwal = JSON.parse(fs.readFileSync('./database/dbjadwal.json', 'utf8'));
+
+    if (!chats || !chats.remmatkul) {
+        console.log(`Fitur ini belum di aktifkan di grub ${groupId}`);
+        return;
+    }
+
+    clearAttendanceCronJobs(groupId); // Ensure we don't have duplicate jobs
+
+    dbJadwal.courses.forEach(course => {
+        // Convert day name to the corresponding cron day format
+        let cronDay;
+        switch (course.day.toLowerCase()) {
+            case 'monday': cronDay = 1; break;
+            case 'tuesday': cronDay = 2; break;
+            case 'wednesday': cronDay = 3; break;
+            default: return; // Skip if it's not Monday, Tuesday, or Wednesday
+        }
+
+        // Calculate 10 minutes before the course's endTime
+        const courseEndTime = moment(course.endTime, 'HH:mm');
+        const reminderTime = courseEndTime.subtract(10, 'minutes');
+        const reminderHour = reminderTime.format('HH'); // Get the hour (in 24-hour format)
+        const reminderMinute = reminderTime.format('mm'); // Get the minute
+
+        // Create a cron schedule for the attendance reminder
+        const job = cron.schedule(`${reminderMinute} ${reminderHour} * * ${cronDay}`, () => {
+            if (chats.remmatkul) {
+                sendAttendanceReminder(groupId, course.courseName); // Send attendance reminder to the group
+            }
+        });
+
+        // Store the job in the activeAttendanceCronJobs object for this group
+        if (!activeAttendanceCronJobs[groupId]) {
+            activeAttendanceCronJobs[groupId] = [];
+        }
+        activeAttendanceCronJobs[groupId].push(job);
+    });
+};
+
+// remserang
+function setupSchoolReminders(groupId) {
+    // Define the reminder times
+    const reminderTimes = {
+        beforeLesson: "07:45",
+        breakStart: "11:10",
+        breakEnd: "13:00",
+        schoolEnd: "16:20"
+    };
+
+    // Set up each reminder using cron
+    if (!activeCronJobs[groupId]) activeCronJobs[groupId] = [];
+
+    // Reminder for before lessons start
+    activeCronJobs[groupId].push(cron.schedule('45 7 * * 1-3', () => {
+      sendAudioReminder(groupId, './media/audio/airport-gate-call-chimes-om-fx-1-00-06.mp3', 'Selamat pagi wahai warga sipil sekalian.\n\nBersiaplah untuk mengikuti kelas pada hari ini, jadwal pertama akan dimulai dalam 30 menit lagi\n\n> Nyth Zero 2024');
+    }));
+
+    // Reminder for break start
+    activeCronJobs[groupId].push(cron.schedule('10 11 * * 1-3', () => {
+      sendAudioReminder(groupId, './media/audio/og-school-bell.mp3', '🔔 *Pengumuman!*\nSekarang waktunya untuk istirahat.\n\nManfaatkan waktu istirahat ini sebijak mungkin!\n\n> Nyth Zero 2024');
+    }));
+
+    // Reminder for break end
+    activeCronJobs[groupId].push(cron.schedule('00 13 * * 1-3', () => {
+      sendAudioReminder(groupId, './media/audio/airport-gate-call-chimes-om-fx-1-00-06.mp3', '🔔 *Pengumuman!*\nWaktu istirahat telah selesai.\n\nDimohon kepada seluruh mahasiswa KPI 2 untuk segera kembali ke dalam kelas!\n\n> Nyth Zero 2024');
+    }));
+
+    // Reminder for end of school
+    activeCronJobs[groupId].push(cron.schedule('20 16 * * 1-3', () => {
+      sendAudioReminder(groupId, './media/audio/jp-school-bel.mp3', '🔔 *Pengumuman!*\nKelas telah selesai.\nterima kasih atas kerja samanya pada hari, kalian semua hebat! sampai jumpa di esok hari👋😁\n\n> Nyth Zero 2024');
+    }));
+}
+
+// Function to clear all active cron jobs for a group
+function clearSchoolCronJobs(groupId) {
+    if (activeCronJobs[groupId]) {
+        activeCronJobs[groupId].forEach(job => job.stop()); // Stop all cron jobs for the group
+        activeCronJobs[groupId] = []; // Clear the cron jobs for this group
+    }
+}
+
+// For sending audio reminders (before lessons, break, etc.)
+async function sendAudioReminder(groupId, audioPath, message) {
+  // Send audio file
+  await conn.sendMessage(groupId, {
+      audio: { url: audioPath },
+      mimetype: 'audio/mp4',
+      ptt: false
+  });
+
+  // Send message
+  await conn.sendMessage(groupId, { text: message });
+}
+
+
+
+
+
         //limit func
         async function useLimit(senuseLimitder, amount) {
             db.data.users[sender].limit -= amount
@@ -769,8 +964,8 @@ setReply(`${err}`)
         if (!isOwner && db.data.settings[botNumber].onlypc && m.isGroup) {
         	if (isCommand){
 	         return setReply("Hello buddy! if you want to use this bot, please chat the bot in private chat")
-	     }
-	}
+	      }
+	      }
 	     
         if (!conn.public) {
             if (isOwner && !m.key.fromMe) return
@@ -783,6 +978,7 @@ setReply(`${err}`)
         if (db.data.settings[botNumber].autoread) {
             conn.readMessages([m.key])
         }
+
         //auto set bio\\
 	if (db.data.settings[botNumber].autobio) {
             conn.updateProfileStatus(`${botName} Have Been Running For ${runtime(process.uptime())}`).catch(_ => _)
@@ -847,6 +1043,7 @@ list.push({
         val.message = msg
         await conn.sendMessage(m.chat, { forward: val }, { quoted: m })
     }
+
     
     //antispam kick
 if (db.data.chats[m.chat].antispam) {
@@ -979,6 +1176,7 @@ conn.sendMessage(`${nomerOwner}@s.whatsapp.net`,{text: `Hi Owner! wa.me/${sender
         }
     }
   }
+
         //respond
         if (db.data.chats[m.chat].badword) {
             for (let bak of bad) {
@@ -3271,7 +3469,7 @@ if (!isAdmins && !isOwner) return sendStickAdmin()
                }
             }
             break
-case 'groupevent': {
+            case 'groupevent': {
                if (!m.isGroup) return sendStickGroup()
 if (!isAdmins && !isOwner) return sendStickAdmin()
                if (args.length < 1) return setReply('on/off?')
@@ -3283,10 +3481,10 @@ if (!isAdmins && !isOwner) return sendStickAdmin()
                   setReply(`${command} is disabled`)
                }
             }
-            break 
+            break
 
  //MENU STIKER===================>>
-case 's': case 'sticker': case 'stiker': {
+case 'sticker': case 'stiker': {
 if (!quoted) return setReply(`Send/Reply Images/Videos/Gifs With Captions ${prefix+command}\nDurasi Video 1-9 Detik`)
 if (/image/.test(mime)) {
 let media = await quoted.download()
@@ -7115,8 +7313,8 @@ case "jadwalkelas": {
                                     title: `✠ 𝐉𝐚𝐝𝐰𝐚𝐥 𝐇𝐚𝐫𝐢 𝐑𝐚𝐛𝐮 ✠
 
 ➸ Studi Pesantren
+➸ Metodologi Penelitian Sosial
 ➸ Studi Agama Kontemporer
-➸Metodologi Penelitian Sosial
 ➸ Analisis Teks Media`,
                                     hasMediaAttachment: true,
                                     ...jdwd
@@ -7144,7 +7342,9 @@ case "jadwalkelas": {
 // Membuat Kelompok ==========>>
 
 case 'mkgroup': {
-    if (args.length < 3) return setReply(`Teknis Penggunan: ${prefix}mkgroup [ID matkul] [s atau g] [value]\n\n> mkgroup 033 g 4\nUntuk membuat kelompok dengan total 4 kelompok\n\n>mkgroup 033 s 5\nUntuk membuat kelompok dengan total 5 orang dalam satu kelompok`);
+    if (args.length < 3) return setReply(`Teknis Penggunan: ${prefix}mkgroup [ID matkul] [s atau g] [value]\n\n> mkgroup 033 g 4\nUntuk membuat kelompok dengan total 4 kelompok\n\n> mkgroup 033 s 5\nUntuk membuat kelompok dengan total 5 orang dalam satu kelompok`);
+
+    await conn.sendMessage(m.chat, { react: { text: "⏱️",key: m.key,}}) 
 
     const path = './database/groups.json';
 
@@ -7153,7 +7353,6 @@ const courses = JSON.parse(fs.readFileSync('./database/dbjadwal.json', 'utf8'));
 
 let groups = fs.existsSync(path) ? JSON.parse(fs.readFileSync(path, 'utf8')) : [];
 
-// Function to generate group ID based on the courseID and existing groups
 function generateGroupId(courseID) {
     let groupCount = groups.filter(g => g.courseID === courseID).length;
     return `g${courseID}${groupCount + 1}`;
@@ -7163,41 +7362,33 @@ function generateGroupId(courseID) {
     const mode = args[1];
     const value = parseInt(args[2]);
 
-    // Validate the course ID
     const course = courses.courses.find(c => c.courseId === courseID);
     if (!course) return setReply('🔴 Error!\nTidak ada mata kuliah dengan ID tersebut!\n\nKirimkan perintah\`listjadwal`untuk melihat mata kuliah dengan ID-nya.');
 
-    // Check the mode (s or g)
     if (!['s', 'g'].includes(mode)) return setReply('🔴 Error!\nGunakan "s" untuk jumlah orang dalam satu grub, atau "g" untuk jumlah keseluruhan grub.');
 
-    // Get the list of students
-    let studentList = [...students]; // Copy the student list
-    const totalStudents = studentList.length;
+    let studentList = [...students.students]; 
+    const totalStudents = studentList.length;    
     
-    // Initialize groups array
     let totalGroups = 0;
     let studentsPerGroup = 0;
     
     if (mode === 's') {
-        // Mode: s (Students per group)
         studentsPerGroup = value;
         totalGroups = Math.floor(totalStudents / studentsPerGroup);
     } else if (mode === 'g') {
-        // Mode: g (Number of groups)
         totalGroups = value;
         studentsPerGroup = Math.floor(totalStudents / totalGroups);
     }
 
     let remainingStudents = totalStudents % (mode === 's' ? studentsPerGroup : totalGroups);
 
-    // Shuffle the student list to randomize group assignment
     studentList.sort(() => Math.random() - 0.5);
 
-    // Distribute students into groups
     let groupData = [];
     for (let i = 0; i < totalGroups; i++) {
         groupData.push({
-            groupId: i + 1,
+            groupId: i + 1,   
             students: studentList.splice(0, studentsPerGroup)
         });
     }
@@ -7274,7 +7465,7 @@ case 'grouplist': case 'listkelompok': {
   // Prepare the group list message
   let message = '✠ 𝐊𝐮𝐫𝐚𝐬𝐢 𝐊𝐞𝐥𝐨𝐦𝐩𝐨𝐤 ✠\n\n';
   groups.forEach((group, index) => {
-      message += `${index + 1}. ➸ Kelompok ${group.groupId} | ${group.courseName}\n`;
+      message += `${index + 1}. Kelompok ${group.groupId} | ${group.courseName}\n`;
   });
 
   // Send the group list message
@@ -7377,6 +7568,81 @@ case 'rmgroup': {
   setReply(`Kelompok dengan ID ${groupId} telah berhasil dihapus.`);
 }
 break;
+
+// Remmatkul switch
+case 'remmatkul': {
+  if (!m.isGroup) return sendStickGroup();
+  if (!isGroupAdmins) return sendStickAdmin();
+
+  let chats = global.db.data.chats[from];
+  if (typeof chats !== 'object') global.db.data.chats[from] = {};
+  
+  if (args.length < 1) return setReply('\`remmatkul\` adalah fitur pengingat otomatis, untuk membuat pengumuman bahwa kelas yang sedang berjalan akan segera berakhir dan berganti ke mata kuliah berikutnya.\n\nUntuk penggunaan, silakan tentukan apakah fitur ini akan dihidupkan atau dimatikan dengan \`on/off\`');
+  
+  if (args[0] === 'on') {
+      chats.remmatkul = true; // Enable reminder for this group
+      setReply('✅ Pengingat otomatis untuk pergantian mata kuliah berhasil *diaktifkan.*');
+      setupCourseReminders(from); // Set up the reminders for the group
+  } else if (args[0] === 'off') {
+      chats.remmatkul = false; // Disable reminder for this group
+      clearCronJobs(from); // Stop any active cron jobs for this group
+      setReply('🔴 Pengingat otomatis untuk pergantian mata kuliah berhasil *dinonaktifkan.*');
+  }
+  break;
+}
+
+// rempresensi
+case 'rempresensi': {
+  if (!m.isGroup) return sendStickGroup();
+  if (!isGroupAdmins) return sendStickAdmin();
+
+  let chats = global.db.data.chats[from];
+  if (typeof chats !== 'object') global.db.data.chats[from] = {};
+  
+  if (args.length < 1) return setReply('\`rempresensi\` adalah fitur pengingat otomatis, untuk seluruh mahasiswa KPI 2 agar segera melakukan presensi, fitur ini akan dikirimkan -10 menit sebelum pelajaran berakhir.\n\nUntuk penggunaan, silakan tentukan apakah fitur ini akan dihidupkan atau dimatikan dengan \`on/off\`');
+  
+  if (args[0] === 'on') {
+      chats.remmatkul = true; // Enable attendance reminder for this group
+      setReply('✅ Pengingat presensi otomatis berhasil *diaktifkan.*');
+      setupAttendanceReminders(from); // Set up the attendance reminders for the group
+  } else if (args[0] === 'off') {
+      chats.remmatkul = false; // Disable attendance reminder for this group
+      clearAttendanceCronJobs(from); // Stop any active cron jobs for attendance reminders
+      setReply('🔴 Pengingat presensi otomatis berhasil *dinonaktifkan*');
+  }
+  break;
+}
+
+// Fitur reminder untuk sekolah, istirahat dan pulang
+
+case 'remserang': {
+  if (!m.isGroup) return sendStickGroup(); // Ensure command is only for groups
+  if (!isGroupAdmins) return sendStickAdmin(); // Ensure only group admins can control the reminders
+
+  // Ensure the chat data is properly initialized in the global database
+  let chats = global.db.data.chats[from];
+  if (typeof chats !== 'object') global.db.data.chats[from] = {};
+
+  // Initialize the reminder state if not already set
+  if (typeof chats.reminderEnabled === 'Fitur ini belum diaktifkan!') {
+      chats.reminderEnabled = false; // Default to off
+  }
+
+  // Check if the command includes 'on' or 'off'
+  if (args.length < 1) return setReply('\`remserang\` adalah fitur pengingat otomatis untuk waktu sebelum sekolah, istirahat, dan pulang sekolah.\n\nSilakan tentukan apakah fitur ini akan dihidupkan atau dimatikan dengan \`on/off\`');
+
+  if (args[0] === 'on') {
+      chats.reminderEnabled = true; // Enable school reminders for this group
+      setReply('✅ Pengingat sekolah otomatis berhasil *diaktifkan.*');
+      setupSchoolReminders(from); // Set up the school reminders for the group
+  } else if (args[0] === 'off') {
+      chats.reminderEnabled = false; // Disable school reminders for this group
+      clearSchoolCronJobs(from); // Stop any active cron jobs for school reminders
+      setReply('🔴 Pengingat sekolah otomatis berhasil *dinonaktifkan*');
+  }
+  break;
+}
+
 
 
 

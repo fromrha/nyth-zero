@@ -67,7 +67,7 @@
         {
             "courseId": "007",
             "courseName": "Studi Pesantren",
-            "day": "Wednesday",
+            "day": "wednesday",
             "startTime": "07:50",
             "endTime": "09:30",
             "teacher": "Siti Robiah Adawiyah, Alhz., S.Sos."
@@ -75,7 +75,7 @@
         {
             "courseId": "025",
             "courseName": "Metodologi Penelitian Sosial",
-            "day": "Wednesday",
+            "day": "wednesday",
             "startTime": "09:30",
             "endTime": "11:10",
             "teacher": "Drs., Moh. Amin., M.Pd.I"
@@ -83,7 +83,7 @@
         {
             "courseId": "024",
             "courseName": "Studi Agama Kontemporer",
-            "day": "Wednesday",
+            "day": "wednesday",
             "startTime": "13:00",
             "endTime": "14:40",
             "teacher": "Muhammad Yusuf, S.Sos., M.Ag"
@@ -91,7 +91,7 @@
         {
             "courseId": "027",
             "courseName": "Analisis Teks Media",
-            "day": "Wednesday",
+            "day": "wednesday",
             "startTime": "14:40",
             "endTime": "16:20",
             "teacher": "Supartinah, S.Pd.,M.I.Kom."
