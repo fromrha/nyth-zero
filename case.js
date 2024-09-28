@@ -198,30 +198,22 @@ const requiredExp = 10000 * userLevel
 const userPersen = userExp/requiredExp*100
 const userVerified = user? db.data.users[m.sender].date : false
 //time
-const wib = moment.tz('Asia/Jakarta').format('HH:mm:ss')
-const hariini = moment.tz('Asia/Jakarta').format('DD/MM/YYYY')
-const waktu = moment().tz('Asia/Jakarta').format('HH:mm:ss') 
-if(waktu < "23:59:00"){
-  var ucapanWaktu = `Selamat Malam 🌃`
-   }
-   if(waktu < "18:00:00"){
-  var ucapanWaktu = `Selamat Malam 🌃`
-   }
-   if(waktu < "17:59:59"){
-  var ucapanWaktu = `Selamat Sore 🌅`
-   }
-   if(waktu < "15:01:00"){
-  var ucapanWaktu = `Selamat Sore 🌅`
-   }
-   if(waktu < "10:01:00"){
-  var ucapanWaktu = `Selamat Siang 🌄`
-   }
-   if(waktu < "04:00:00"){
-  var ucapanWaktu = `Selamat Pagi 🌄`
-   } 
-   if(waktu < "00:00:59"){
-  var ucapanWaktu = `Selamat Pagi 🌌`
-   }  
+const wib = moment.tz('Asia/kolkata').format('HH:mm:ss')
+const hariini = moment.tz('Asia/kolkata').format('DD/MM/YYYY')
+const waktu = moment().tz('Asia/kolkata').format('HH:mm:ss') 
+if (waktu >= "00:00:00" && waktu < "04:00:00") {
+  ucapanWaktu = "Selamat Pagi 🌌";
+} else if (waktu >= "04:00:00" && waktu < "10:01:00") {
+  ucapanWaktu = "Selamat Pagi 🌄";
+} else if (waktu >= "10:01:00" && waktu < "15:01:00") {
+  ucapanWaktu = "Selamat Siang 🌄";
+} else if (waktu >= "15:01:00" && waktu < "17:59:59") {
+  ucapanWaktu = "Selamat Sore 🌅";
+} else if (waktu >= "18:00:00" && waktu < "23:59:59") {
+  ucapanWaktu = "Selamat Malam 🌃";
+} else {
+  ucapanWaktu = "Apa kabar?"; // Default for any time not covered
+}
 // TANGGAL ISLAMIC 
 let dot = new Date(new Date() + 3600000);
 const dateIslamic = Intl.DateTimeFormat("id" + "-TN-u-ca-islamic", {
@@ -7488,11 +7480,11 @@ break;
 
 // Logika untuk melihat informasi kelompok
 
-case 's': {
+case 'view': {
   const path = './database/groups.json';
 
   // Check if the group ID is provided
-  if (args.length < 1) return setReply('Harap berikan ID kelompok, contoh: s g0331');
+  if (args.length < 1) return setReply('Harap berikan ID kelompok, contoh: view g0331');
 
   const groupId = args[0];
 
