@@ -875,47 +875,41 @@ const setupAttendanceReminders = (groupId) => {
 
 // remserang
 function setupSchoolReminders(groupId) {
-    // Define the reminder times
     const reminderTimes = {
         beforeLesson: "07:45",
         breakStart: "11:10",
-        breakEnd: "13:00",
-        schoolEnd: "16:20"
+        breakEnd: "16:45",
+        schoolEnd: "16:46"
     };
 
-    // Set up each reminder using cron
     if (!activeCronJobs[groupId]) activeCronJobs[groupId] = [];
 
-    // Reminder for before lessons start
     activeCronJobs[groupId].push(cron.schedule('45 7 * * 1-3', () => {
       sendAudioReminder(groupId, './media/audio/airport-gate-call-chimes-om-fx-1-00-06.mp3', 'Selamat pagi wahai warga sipil sekalian.\n\nBersiaplah untuk mengikuti kelas pada hari ini, jadwal pertama akan dimulai dalam 30 menit lagi\n\n> Nyth Zero 2024');
     }));
 
-    // Reminder for break start
     activeCronJobs[groupId].push(cron.schedule('10 11 * * 1-3', () => {
       sendAudioReminder(groupId, './media/audio/og-school-bell.mp3', '🔔 *Pengumuman!*\nSekarang waktunya untuk istirahat.\n\nManfaatkan waktu istirahat ini sebijak mungkin!\n\n> Nyth Zero 2024');
     }));
 
-    // Reminder for break end
-    activeCronJobs[groupId].push(cron.schedule('00 13 * * 1-3', () => {
+    activeCronJobs[groupId].push(cron.schedule('45 16 * * 1-3', () => {
       sendAudioReminder(groupId, './media/audio/airport-gate-call-chimes-om-fx-1-00-06.mp3', '🔔 *Pengumuman!*\nWaktu istirahat telah selesai.\n\nDimohon kepada seluruh mahasiswa KPI 2 untuk segera kembali ke dalam kelas!\n\n> Nyth Zero 2024');
     }));
 
-    // Reminder for end of school
-    activeCronJobs[groupId].push(cron.schedule('20 16 * * 1-3', () => {
+    activeCronJobs[groupId].push(cron.schedule('46 16 * * 1-3', () => {
       sendAudioReminder(groupId, './media/audio/jp-school-bel.mp3', '🔔 *Pengumuman!*\nKelas telah selesai.\nterima kasih atas kerja samanya pada hari, kalian semua hebat! sampai jumpa di esok hari👋😁\n\n> Nyth Zero 2024');
     }));
 }
 
-// Function to clear all active cron jobs for a group
+
 function clearSchoolCronJobs(groupId) {
     if (activeCronJobs[groupId]) {
-        activeCronJobs[groupId].forEach(job => job.stop()); // Stop all cron jobs for the group
-        activeCronJobs[groupId] = []; // Clear the cron jobs for this group
+        activeCronJobs[groupId].forEach(job => job.stop()); 
+        activeCronJobs[groupId] = [];
     }
 }
 
-// For sending audio reminders (before lessons, break, etc.)
+
 async function sendAudioReminder(groupId, audioPath, message) {
   // Send audio file
   await conn.sendMessage(groupId, {
@@ -5663,7 +5657,7 @@ case 'listpj': {
   if (!m.isGroup) return sendStickGroup(); // Command for groups only
 
   // Define the path to the image
-  const imagePath = './media/pjclasssmt3.png';
+  const imagePath = './media/pjclasssmt3-v2.png';
 
   // Send the image with a caption
   conn.sendMessage(m.chat, {
