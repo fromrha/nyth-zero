@@ -1,21 +1,3 @@
 {
-  "sessions": [
-    {
-      "sessionId": "02701",
-      "courseId": "027",
-      "courseName": "Analisis Teks Media",
-      "date": "9/21/2024",
-      "studentsPresent": [
-        {
-          "name": "Rahman Hanafi",
-          "nim": "2023050051"
-        },
-        {
-          "name": "Fita Yunita",
-          "nim": "2023050016"
-        }
-      ],
-      "ended": true
-    }
-  ]
+  "sessions": []
 }

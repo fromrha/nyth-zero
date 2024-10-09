@@ -1073,6 +1073,51 @@
       "premium": false,
       "limit": 100,
       "totalLimit": 0
+    },
+    "6281327371905@s.whatsapp.net": {
+      "serialNumber": "iSzW",
+      "title": "User",
+      "afkTime": -1,
+      "exp": 100,
+      "level": 1,
+      "hit": 0,
+      "balance": 1000,
+      "badword": 0,
+      "afkReason": "",
+      "nick": "alvinnall",
+      "premium": false,
+      "limit": 100,
+      "totalLimit": 0
+    },
+    "6281282558045@s.whatsapp.net": {
+      "serialNumber": "4e27",
+      "title": "User",
+      "afkTime": -1,
+      "exp": 100,
+      "level": 1,
+      "hit": 0,
+      "balance": 1000,
+      "badword": 0,
+      "afkReason": "",
+      "nick": "『Marcell_hdytツ",
+      "premium": false,
+      "limit": 100,
+      "totalLimit": 0
+    },
+    "6281292261637@s.whatsapp.net": {
+      "serialNumber": "x8y0",
+      "title": "User",
+      "afkTime": -1,
+      "exp": 100,
+      "level": 1,
+      "hit": 0,
+      "balance": 1000,
+      "badword": 0,
+      "afkReason": "",
+      "nick": "Nurul Amanah 🤍",
+      "premium": "false",
+      "limit": 100,
+      "totalLimit": 0
     }
   },
   "chats": {
@@ -4178,6 +4223,28 @@
       "antitoxic": false,
       "antipromotion": false,
       "antilinkgc": false
+    },
+    "120363327785844151@g.us": {
+      "name": "KRU MAGANG LPMSQ 2024",
+      "badword": false,
+      "antiforeignnum": false,
+      "antibot": false,
+      "antiviewonce": false,
+      "antispam": false,
+      "antivirtex": false,
+      "antimedia": false,
+      "antiimage": false,
+      "antivideo": false,
+      "antiaudio": false,
+      "antipoll": false,
+      "antisticker": false,
+      "antilocation": false,
+      "antidocument": false,
+      "anticontact": false,
+      "antilink": false,
+      "antitoxic": false,
+      "antipromotion": false,
+      "antilinkgc": false
     }
   },
   "settings": {
@@ -4213,7 +4280,7 @@
       }
     },
     "6285231390730@s.whatsapp.net": {
-      "totalhit": 399,
+      "totalhit": 594,
       "totalError": 0,
       "online": false,
       "autosticker": false,

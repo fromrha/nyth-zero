@@ -1,0 +1,318 @@
+// MENU DANA
+case 'Dana': case 'dana': {
+  if (!isGroup) return sendStickGroup();
+  
+  // Define the path to the image
+  const imagePath = path.join(__dirname, 'src', 'donasi', 'qr-dana-shin-pay.png');
+  
+  // Read the image file
+  const imageBuffer = fs.readFileSync(imagePath);
+  
+  // Send the image
+  conn.sendMessage(m.chat, { 
+      image: imageBuffer, 
+      caption: 'Silakan scan kode qr di atas, terima kasih 😊'
+  }, { 
+      quoted: m 
+  });
+  break;
+}
+
+// MENU BRI
+case 'bri': case 'BRI': {
+  if (!isGroup) return sendStickGroup();
+  
+  // Define the path to the image
+  const imagePath = path.join(__dirname, 'src', 'donasi', 'brimo_thumb.jpg');
+  
+  // Read the image file
+  const imageBuffer = fs.readFileSync(imagePath);
+  
+  // Send the image
+  conn.sendMessage(m.chat, { 
+      image: imageBuffer, 
+      caption: 'Silakan scan kode qr di atas\n\nApabila gambar tidak tidak muncul, berikut nomor rekening saya, A.N\n\nRahman Hanafi\n011201108655500\n\nTerima kasih 😊'
+  }, { 
+      quoted: m 
+  });
+  break;
+}
+
+// MENU JAGO
+case 'jago': case 'Jago': {
+  if (!isGroup) return sendStickGroup();
+  
+  // Define the path to the image
+  const imagePath = path.join(__dirname, 'src', 'donasi', 'bankjago_thumb.jpg');
+  
+  // Read the image file
+  const imageBuffer = fs.readFileSync(imagePath);
+  
+  // Send the image
+  conn.sendMessage(m.chat, { 
+      image: imageBuffer, 
+      caption: 'Nomor rekening bank jago tertera pada gambar di atas\n\nApabila gambar tidak tidak muncul, berikut nomor rekening saya, A.N\n\nRahman Hanafi\n105914614838\n\nTerima kasih 😊'
+  }, { 
+      quoted: m 
+  });
+  break;
+}
+
+// MENU SAWERIA
+case 'SAWERIA': case 'saweria': {
+  if (!isGroup) return sendStickGroup();
+  
+  // Define the path to the image
+  const imagePath = path.join(__dirname, 'src', 'donasi', 'saweria-thumb.png');
+  
+  // Read the image file
+  const imageBuffer = fs.readFileSync(imagePath);
+  
+  // Send the image
+  conn.sendMessage(m.chat, { 
+      image: imageBuffer, 
+      caption: 'Silakan tekan tautan berikut ini, dan isikan berapa yang ingin anda donasikan\n\nhttps://saweria.co/Shinrinyoku \n\nTerima kasih 😊'
+  }, { 
+      quoted: m 
+  });
+  break;
+}
+
+  // Donasi
+  case 'support': case 'donasi': {
+    if (!isGroup) return sendStickGroup()
+    let owned = `${global.nomerOwner}`
+    let statususer = isOwner ? 'Owner 🎐' : isPremium ? 'Premium 💎' : 'User 🐱';
+    let limitz = db.data.users[m.sender].limit;
+    
+    
+    const caption = `${menumenhara(prefix)}`;
+
+    let sections = [
+      {
+      title: 'Metode Pembayaran',
+      rows: [{
+      title: 'Dana',
+      description: `Pembayaran melalui Dana`, 
+      id: `${prefix}dana`
+      },
+      {
+      title: 'Bank BRI', 
+      description: "Pembayaran melalui transfer Bank BRI", 
+      id: `${prefix}bri`
+      },
+      {
+      title: 'Bank Jago', 
+      description: "Pembayaran melalui transfer Bank Jago", 
+      id: `${prefix}jago`
+      },
+      {
+      title: 'Saweria', 
+      description: "Pembayaran melalui platform Saweria", 
+      id: `${prefix}saweria`
+      }]
+      }]
+      
+      let listMessage = {
+          title: 'Opsi Donasi', 
+          sections
+      };
+    
+    
+    let msg = generateWAMessageFromContent(m.chat, {
+     viewOnceMessage: {
+     message: {
+     "messageContextInfo": {
+     "deviceListMetadata": {},
+     "deviceListMetadataVersion": 2
+     },
+     interactiveMessage: proto.Message.InteractiveMessage.create({
+     contextInfo: {
+     mentionedJid: [m.sender], 
+     isForwarded: true, 
+     forwardedNewsletterMessageInfo: {
+     newsletterJid,
+      serverMessageId: 100,
+      newsletterName
+      },
+     businessMessageForwardInfo: { businessOwnerJid: conn.decodeJid(conn.user.id) },
+     }, 
+     body: proto.Message.InteractiveMessage.Body.create({
+     text: caption
+     }),
+     footer: proto.Message.InteractiveMessage.Footer.create({
+     text: Ehztext(`© Nyth Zero - 2024`)
+     }),
+     header: proto.Message.InteractiveMessage.Header.create({
+     title: `Hai ${ucapanWaktu}, ${pushname}\n\nApabila anda ingin mensupport saya, silakan berdonasi lewat opsi di bawah ini. Terima kasih, panjang-panjang orang baik😁`,
+     subtitle: "nythzero",
+     hasMediaAttachment: true,...(await prepareWAMessageMedia({ image: { url: "https://telegra.ph/file/e6f54418bdc9096b3f306.jpg" } }, { upload: conn.waUploadToServer }))
+     }),
+     nativeFlowMessage: proto.Message.InteractiveMessage.NativeFlowMessage.create({
+     buttons: [ 
+        {
+        "name": "single_select",
+        "buttonParamsJson": JSON.stringify(listMessage) 
+        },
+        {
+        "name": "cta_url",
+        "buttonParamsJson": "{\"display_text\":\"Pencipta\",\"url\":\"https://wa.me/6282114692838\",\"merchant_url\":\"https://wa.me/6282114692838\"}"
+        },
+     ],
+     })
+     })
+     }
+     }
+    }, {})
+    
+    if (!q) await conn.relayMessage(msg.key.remoteJid, msg.message, {
+     messageId: msg.key.id
+    })
+    if (args[0] === "all") {
+        
+        let owned = `${global.nomerOwner}`
+        let statususer = isOwner ? 'Owner 🎐' : isPremium ? 'Premium 💎' : 'User 🐱';
+        let limitz = db.data.users[m.sender].limit;
+    let photo1 = pickRandom(global.fotoRandom)
+       let wek = `
+    
+    ${gris}┈ ⋞ 〈 OPSI DONASI 〉 ⋟ ┈${gris}
+    Hai ${pushname}
+    
+    ▸ ɴᴀᴍᴇ : ${pushname}
+    ▸ ɴᴜᴍʙᴇʀ : ${m.sender.split('@')[0]}
+    ▸ sᴛᴀᴛᴜs : ${statususer}
+    ▸ ʟɪᴍɪᴛ : ${limitz}`
+     const caption = `${wek}\n\n${readmore}\n\n${dana(prefix)}\n\n\n${ovo(prefix)}\n\n\n${qris(prefix)}\n\n\n${tfbank(prefix)}`;
+
+    conn.sendMessage(m.chat, {
+    text: caption,
+    contextInfo: {
+    forwardingScore: 999,
+    isForwarded: true,
+    forwardedNewsletterMessageInfo: {
+    newsletterJid,
+    serverMessageId: 100,
+    newsletterName },
+    externalAdReply: {  
+    title: botName, 
+    body: `Library: Whiskeysockets/Baileys ${baileysVersion}`,
+    thumbnailUrl:photo1,
+    sourceUrl: global.sig, 
+    mediaType: 1,
+    renderLargerThumbnail: true
+    }}}, {quoted: m})
+    
+     } else if (args[0] === 'dana') {
+    await sleep(1000)
+        
+     const caption = `${menugrup(prefix)}`;
+    
+        conn.sendMessage(m.chat, {
+        text: caption,
+        contextInfo: {
+        forwardingScore: 999,
+        isForwarded: true,
+        forwardedNewsletterMessageInfo: {
+        newsletterJid,
+        serverMessageId: 100,
+        newsletterName },
+        externalAdReply: {  
+        title: botName, 
+        body: `Library: Whiskeysockets/Baileys ${baileysVersion}`,
+        thumbnailUrl: pickRandom(fotoRandom),
+        sourceUrl: global.sig, 
+        mediaType: 1,
+        renderLargerThumbnail: true
+        }}}, {quoted: m})
+     } else if (args[0] === 'bri') {
+    await sleep(1000)
+
+    const caption = `${menukelas(prefix)}`;
+
+    conn.sendMessage(m.chat, {
+    text: caption,
+    contextInfo: {
+    forwardingScore: 999,
+    isForwarded: true,
+    forwardedNewsletterMessageInfo: {
+    newsletterJid,
+    serverMessageId: 100,
+    newsletterName },
+    externalAdReply: {  
+    title: botName, 
+    body: `Library: Whiskeysockets/Baileys ${baileysVersion}`,
+    thumbnailUrl: pickRandom(fotoRandom),
+    sourceUrl: global.sig, 
+    mediaType: 1,
+    renderLargerThumbnail: true
+    }}}, {quoted: Anjel})
+ } else if (args[0] === 'game') {
+await sleep(1000)
+        
+     const caption = `${menugame(prefix)}`;
+    
+        conn.sendMessage(m.chat, {
+        text: caption,
+        contextInfo: {
+        forwardingScore: 999,
+        isForwarded: true,
+        forwardedNewsletterMessageInfo: {
+        newsletterJid,
+        serverMessageId: 100,
+        newsletterName },
+        externalAdReply: {  
+        title: botName, 
+        body: `Library: Whiskeysockets/Baileys ${baileysVersion}`,
+        thumbnailUrl: pickRandom (fotoRandom),
+        sourceUrl: global.syt, 
+        mediaType: 1,
+        renderLargerThumbnail: true
+        }}}, {quoted: m})
+     } else if (args[0] === 'jago') {
+    await sleep(1000)
+        
+     const caption = `${menuai(prefix)}`;
+    
+        conn.sendMessage(m.chat, {
+        text: caption,
+        contextInfo: {
+        forwardingScore: 999,
+        isForwarded: true,
+        forwardedNewsletterMessageInfo: {
+        newsletterJid,
+        serverMessageId: 100,
+        newsletterName },
+        externalAdReply: {  
+        title: botName, 
+        body: `Library: Whiskeysockets/Baileys ${baileysVersion}`,
+        thumbnailUrl: pickRandom (fotoRandom),
+        sourceUrl: syt, 
+        mediaType: 1,
+        renderLargerThumbnail: true
+        }}}, {quoted: Am})
+     } else if (args[0] === 'saweria') {
+    await sleep(1000)
+        
+     const caption = `${menudownload(prefix)}`;
+    
+        conn.sendMessage(m.chat, {
+        text: caption,
+        contextInfo: {
+        forwardingScore: 999,
+        isForwarded: true,
+        forwardedNewsletterMessageInfo: {
+        newsletterJid,
+        serverMessageId: 100,
+        newsletterName },
+        externalAdReply: {  
+        title: botName, 
+        body: `Library: Whiskeysockets/Baileys ${baileysVersion}`,
+        thumbnailUrl: pickRandom(fotoRandom),
+        sourceUrl: syt, 
+        mediaType: 1,
+        renderLargerThumbnail: true
+        }}}, {quoted: m})
+     }
+    }
+    break

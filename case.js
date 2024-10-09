@@ -1163,6 +1163,54 @@ conn.sendMessage(`${nomerOwner}@s.whatsapp.net`,{text: `Hi Owner! wa.me/${sender
     }
   }
 
+  // Handle button click for attendance
+// if (m.message && m.message.buttonsResponseMessage && m.message.buttonsResponseMessage.selectedButtonId.startsWith('hadir_')) {
+//   const sessionId = m.message.buttonsResponseMessage.selectedButtonId.split('_')[1];
+
+//   // Load the session data
+//   let dbpresensi = JSON.parse(fs.readFileSync('./database/dbpresensi.json', 'utf8'));
+//   let activeSession = dbpresensi.sessions.find(s => s.sessionId === sessionId && !s.ended);
+
+//   if (!activeSession) {
+//       return setReply('Sesi presensi tidak ditemukan atau sudah berakhir.');
+//   }
+
+//   // Find the student based on the phone number of the sender
+//   let dbmhs = JSON.parse(fs.readFileSync('./database/dbmhs.json', 'utf8'));
+//   let student = dbmhs.students.find(s => s.phone === m.sender.split('@')[0]);
+
+//   if (!student) {
+//       return setReply('Nomor telepon Anda tidak terdaftar sebagai mahasiswa KPI 2.');
+//   }
+
+//   // Check if the student is already marked as present
+//   if (activeSession.studentsPresent.find(s => s.phone === student.phone)) {
+//       return setReply(`Anda sudah terdaftar dalam presensi mata kuliah *${activeSession.courseName}*.`);
+//   }
+
+//   // Mark the student as present
+//   activeSession.studentsPresent.push({
+//       name: student.name,
+//       nim: student.nim,
+//       phone: student.phone
+//   });
+
+//   // Save the updated session data
+//   fs.writeFileSync('./database/dbpresensi.json', JSON.stringify(dbpresensi, null, 2));
+
+//   // Send confirmation message
+//   setReply(`Terima kasih, ${student.name}. Anda sudah terdaftar dalam presensi mata kuliah *${activeSession.courseName}* pada *${activeSession.date}*.`);
+
+//   // Update the attendance list
+//   let attendanceList = `Presensi mata kuliah *${activeSession.courseName}* pada *${activeSession.date}*\n\n`;
+//   attendanceList += '*Daftar Hadir:*\n';
+//   activeSession.studentsPresent.forEach((s, index) => {
+//       attendanceList += `${index + 1}. ${s.name} (NIM: ${s.nim})\n`;
+//   });
+
+//   conn.sendMessage(m.chat, { text: attendanceList }, { quoted: m });
+// }
+
         //respond
         if (db.data.chats[m.chat].badword) {
             for (let bak of bad) {
@@ -3572,324 +3620,117 @@ let encmedia = await conn.sendImageAsSticker(from, wifegerakx, m, { packname: gl
 }
 break
 
-// MENU DANA
-case 'Dana': case 'dana': {
-  if (!isGroup) return sendStickGroup();
-  
-  // Define the path to the image
-  const imagePath = path.join(__dirname, 'src', 'donasi', 'qr-dana-shin-pay.png');
-  
-  // Read the image file
-  const imageBuffer = fs.readFileSync(imagePath);
-  
-  // Send the image
-  conn.sendMessage(m.chat, { 
-      image: imageBuffer, 
-      caption: 'Silakan scan kode qr di atas, terima kasih 😊'
-  }, { 
-      quoted: m 
-  });
-  break;
+case "donasi":
+case "donate": {
+    if (!m.isGroup) return sendStickGroup();
+    await conn.sendMessage(m.chat, { react: { text: "⏱️",key: m.key,}}) 
+
+    let total = 0;
+    let getGroups = await conn.groupFetchAllParticipating();
+    let groups = Object.entries(getGroups).slice(0).map((entry) => entry[1]);
+    let usergc = groups.map((v) => v.id);
+    let time = ms(5000 * Number(usergc.length));
+
+    // Prepare the image
+    let jago = await prepareWAMessageMedia({ image: await fs.readFileSync("./src/donasi/bankjago_thumb.jpg") }, { upload: conn.waUploadToServer });
+    let brimo = await prepareWAMessageMedia({ image: await fs.readFileSync("./src/donasi/brimo_thumb.jpg") }, { upload: conn.waUploadToServer });
+    let dana = await prepareWAMessageMedia({ image: await fs.readFileSync("./src/donasi/qr-dana-shin-pay.png") }, { upload: conn.waUploadToServer });
+    let saweria = await prepareWAMessageMedia({ image: await fs.readFileSync("./src/donasi/saweria-thumb.png") }, { upload: conn.waUploadToServer });
+
+    // Define the carousel message content
+    const msgii = await generateWAMessageFromContent(m.chat, {
+        viewOnceMessage: {
+            message: {
+                messageContextInfo: {
+                    deviceListMetadata: {},
+                    deviceListMetadataVersion: 2
+                },
+                interactiveMessage: proto.Message.InteractiveMessage.fromObject({
+                    body: proto.Message.InteractiveMessage.Body.fromObject({
+                        text: "Terima kasih king 🙇‍♀️\n"
+                    }),
+                    carouselMessage: proto.Message.InteractiveMessage.CarouselMessage.fromObject({
+                        cards: [
+                            {
+                                header: proto.Message.InteractiveMessage.Header.fromObject({
+                                    title: `✠ 𝐁𝐚𝐧𝐤 𝐉𝐚𝐠𝐨 ✠
+
+Nomor rekening bank jago tertera pada gambar di atas\n\nApabila gambar tidak tidak muncul, berikut nomor rekening saya, A.N\n\nRahman Hanafi\n105914614838\n\nTerima kasih 😊`,
+                                    hasMediaAttachment: true,
+                                    ...jago
+                                }),
+                                nativeFlowMessage: proto.Message.InteractiveMessage.NativeFlowMessage.fromObject({
+                                    buttons: [{
+                                        name: "cta_copy",
+                                        buttonParamsJson: JSON.stringify({
+                                          "display_text": "Salin No. Rekening",
+                                          "copy_code": "105914614838"
+                                      })
+                                    }]
+                                })
+                            },
+                            {
+                                header: proto.Message.InteractiveMessage.Header.fromObject({
+                                    title: `✠ 𝐁𝐚𝐧𝐤 𝐁𝐑𝐈 ✠
+                                    
+Silakan scan kode qr di atas\n\nApabila gambar tidak tidak muncul, berikut nomor rekening saya, A.N\n\nRahman Hanafi\n011201108655500\n\nTerima kasih 😊`,
+                                    hasMediaAttachment: true,
+                                    ...brimo
+                                }),
+                                nativeFlowMessage: proto.Message.InteractiveMessage.NativeFlowMessage.fromObject({
+                                    buttons: [{
+                                        name: "cta_copy",
+                                        buttonParamsJson: JSON.stringify({
+                                          "display_text": "Salin No. Rekening",
+                                          "copy_code": "011201108655500"
+                                      })
+                                    }]
+                                })
+                            },
+                            {
+                                header: proto.Message.InteractiveMessage.Header.fromObject({
+                                    title: `✠ 𝐃𝐚𝐧𝐚 ✠
+
+Silakan scan kode qr di atas\n\nApabila gambar tidak tidak muncul, berikut nomor dana saya, A.N\n\nhaishin\n(62)821214692838\n\n terima kasih 😊`,
+                                    hasMediaAttachment: true,
+                                    ...dana
+                                }),
+                                nativeFlowMessage: proto.Message.InteractiveMessage.NativeFlowMessage.fromObject({
+                                    buttons: [{
+                                        name: "cta_copy",
+                                        buttonParamsJson: JSON.stringify({
+                                          "display_text": "Salin No. Telepon",
+                                          "copy_code": "6282114692838"
+                                      })
+                                    }]
+                                })
+                            },
+                            {
+                                header: proto.Message.InteractiveMessage.Header.fromObject({
+                                    title: `✠ 𝐒𝐚𝐰𝐞𝐫𝐢𝐚 ✠
+
+Silakan tekan tautan berikut ini, dan isikan berapa yang ingin anda donasikan\n\nhttps://saweria.co/Shinrinyoku \n\nTerima kasih 😊`,
+                                    hasMediaAttachment: true,
+                                    ...saweria
+                                }),
+                                nativeFlowMessage: proto.Message.InteractiveMessage.NativeFlowMessage.fromObject({
+                                    buttons: [{
+                                        name: "cta_url",
+                                        buttonParamsJson: `{\"display_text\":\"Saweria\",\"url\":\"https://saweria.co/Shinrinyoku\",\"merchant_url\":\"https://saweria.co/Shinrinyoku\"}`
+                                    }]
+                                })
+                            },
+                        ]
+                    })
+                })
+            }
+        }
+    }, { quoted: m });
+
+    await conn.relayMessage(m.chat, msgii.message, { messageId: msgii.key.id });
+
+    break;
 }
-
-// MENU BRI
-case 'bri': case 'BRI': {
-  if (!isGroup) return sendStickGroup();
-  
-  // Define the path to the image
-  const imagePath = path.join(__dirname, 'src', 'donasi', 'brimo_thumb.jpg');
-  
-  // Read the image file
-  const imageBuffer = fs.readFileSync(imagePath);
-  
-  // Send the image
-  conn.sendMessage(m.chat, { 
-      image: imageBuffer, 
-      caption: 'Silakan scan kode qr di atas\n\nApabila gambar tidak tidak muncul, berikut nomor rekening saya, A.N\n\nRahman Hanafi\n011201108655500\n\nTerima kasih 😊'
-  }, { 
-      quoted: m 
-  });
-  break;
-}
-
-// MENU JAGO
-case 'jago': case 'Jago': {
-  if (!isGroup) return sendStickGroup();
-  
-  // Define the path to the image
-  const imagePath = path.join(__dirname, 'src', 'donasi', 'bankjago_thumb.jpg');
-  
-  // Read the image file
-  const imageBuffer = fs.readFileSync(imagePath);
-  
-  // Send the image
-  conn.sendMessage(m.chat, { 
-      image: imageBuffer, 
-      caption: 'Nomor rekening bank jago tertera pada gambar di atas\n\nApabila gambar tidak tidak muncul, berikut nomor rekening saya, A.N\n\nRahman Hanafi\n105914614838\n\nTerima kasih 😊'
-  }, { 
-      quoted: m 
-  });
-  break;
-}
-
-// MENU SAWERIA
-case 'SAWERIA': case 'saweria': {
-  if (!isGroup) return sendStickGroup();
-  
-  // Define the path to the image
-  const imagePath = path.join(__dirname, 'src', 'donasi', 'saweria-thumb.png');
-  
-  // Read the image file
-  const imageBuffer = fs.readFileSync(imagePath);
-  
-  // Send the image
-  conn.sendMessage(m.chat, { 
-      image: imageBuffer, 
-      caption: 'Silakan tekan tautan berikut ini, dan isikan berapa yang ingin anda donasikan\n\nhttps://saweria.co/Shinrinyoku \n\nTerima kasih 😊'
-  }, { 
-      quoted: m 
-  });
-  break;
-}
-
-  // Donasi
-  case 'support': case 'donasi': {
-    if (!isGroup) return sendStickGroup()
-    let owned = `${global.nomerOwner}`
-    let statususer = isOwner ? 'Owner 🎐' : isPremium ? 'Premium 💎' : 'User 🐱';
-    let limitz = db.data.users[m.sender].limit;
-    
-    
-    const caption = `${menumenhara(prefix)}`;
-
-    let sections = [
-      {
-      title: 'Metode Pembayaran',
-      rows: [{
-      title: 'Dana',
-      description: `Pembayaran melalui Dana`, 
-      id: `${prefix}dana`
-      },
-      {
-      title: 'Bank BRI', 
-      description: "Pembayaran melalui transfer Bank BRI", 
-      id: `${prefix}bri`
-      },
-      {
-      title: 'Bank Jago', 
-      description: "Pembayaran melalui transfer Bank Jago", 
-      id: `${prefix}jago`
-      },
-      {
-      title: 'Saweria', 
-      description: "Pembayaran melalui platform Saweria", 
-      id: `${prefix}saweria`
-      }]
-      }]
-      
-      let listMessage = {
-          title: 'Opsi Donasi', 
-          sections
-      };
-    
-    
-    let msg = generateWAMessageFromContent(m.chat, {
-     viewOnceMessage: {
-     message: {
-     "messageContextInfo": {
-     "deviceListMetadata": {},
-     "deviceListMetadataVersion": 2
-     },
-     interactiveMessage: proto.Message.InteractiveMessage.create({
-     contextInfo: {
-     mentionedJid: [m.sender], 
-     isForwarded: true, 
-     forwardedNewsletterMessageInfo: {
-     newsletterJid,
-      serverMessageId: 100,
-      newsletterName
-      },
-     businessMessageForwardInfo: { businessOwnerJid: conn.decodeJid(conn.user.id) },
-     }, 
-     body: proto.Message.InteractiveMessage.Body.create({
-     text: caption
-     }),
-     footer: proto.Message.InteractiveMessage.Footer.create({
-     text: Ehztext(`© Nyth Zero - 2024`)
-     }),
-     header: proto.Message.InteractiveMessage.Header.create({
-     title: `Hai ${ucapanWaktu}, ${pushname}\n\nApabila anda ingin mensupport saya, silakan berdonasi lewat opsi di bawah ini. Terima kasih, panjang-panjang orang baik😁`,
-     subtitle: "nythzero",
-     hasMediaAttachment: true,...(await prepareWAMessageMedia({ image: { url: "https://telegra.ph/file/e6f54418bdc9096b3f306.jpg" } }, { upload: conn.waUploadToServer }))
-     }),
-     nativeFlowMessage: proto.Message.InteractiveMessage.NativeFlowMessage.create({
-     buttons: [ 
-        {
-        "name": "single_select",
-        "buttonParamsJson": JSON.stringify(listMessage) 
-        },
-        {
-        "name": "cta_url",
-        "buttonParamsJson": "{\"display_text\":\"Pencipta\",\"url\":\"https://wa.me/6282114692838\",\"merchant_url\":\"https://wa.me/6282114692838\"}"
-        },
-     ],
-     })
-     })
-     }
-     }
-    }, {})
-    
-    if (!q) await conn.relayMessage(msg.key.remoteJid, msg.message, {
-     messageId: msg.key.id
-    })
-    if (args[0] === "all") {
-        
-        let owned = `${global.nomerOwner}`
-        let statususer = isOwner ? 'Owner 🎐' : isPremium ? 'Premium 💎' : 'User 🐱';
-        let limitz = db.data.users[m.sender].limit;
-    let photo1 = pickRandom(global.fotoRandom)
-       let wek = `
-    
-    ${gris}┈ ⋞ 〈 OPSI DONASI 〉 ⋟ ┈${gris}
-    Hai ${pushname}
-    
-    ▸ ɴᴀᴍᴇ : ${pushname}
-    ▸ ɴᴜᴍʙᴇʀ : ${m.sender.split('@')[0]}
-    ▸ sᴛᴀᴛᴜs : ${statususer}
-    ▸ ʟɪᴍɪᴛ : ${limitz}`
-     const caption = `${wek}\n\n${readmore}\n\n${dana(prefix)}\n\n\n${ovo(prefix)}\n\n\n${qris(prefix)}\n\n\n${tfbank(prefix)}`;
-
-    conn.sendMessage(m.chat, {
-    text: caption,
-    contextInfo: {
-    forwardingScore: 999,
-    isForwarded: true,
-    forwardedNewsletterMessageInfo: {
-    newsletterJid,
-    serverMessageId: 100,
-    newsletterName },
-    externalAdReply: {  
-    title: botName, 
-    body: `Library: Whiskeysockets/Baileys ${baileysVersion}`,
-    thumbnailUrl:photo1,
-    sourceUrl: global.sig, 
-    mediaType: 1,
-    renderLargerThumbnail: true
-    }}}, {quoted: m})
-    
-     } else if (args[0] === 'dana') {
-    await sleep(1000)
-        
-     const caption = `${menugrup(prefix)}`;
-    
-        conn.sendMessage(m.chat, {
-        text: caption,
-        contextInfo: {
-        forwardingScore: 999,
-        isForwarded: true,
-        forwardedNewsletterMessageInfo: {
-        newsletterJid,
-        serverMessageId: 100,
-        newsletterName },
-        externalAdReply: {  
-        title: botName, 
-        body: `Library: Whiskeysockets/Baileys ${baileysVersion}`,
-        thumbnailUrl: pickRandom(fotoRandom),
-        sourceUrl: global.sig, 
-        mediaType: 1,
-        renderLargerThumbnail: true
-        }}}, {quoted: m})
-     } else if (args[0] === 'bri') {
-    await sleep(1000)
-
-    const caption = `${menukelas(prefix)}`;
-
-    conn.sendMessage(m.chat, {
-    text: caption,
-    contextInfo: {
-    forwardingScore: 999,
-    isForwarded: true,
-    forwardedNewsletterMessageInfo: {
-    newsletterJid,
-    serverMessageId: 100,
-    newsletterName },
-    externalAdReply: {  
-    title: botName, 
-    body: `Library: Whiskeysockets/Baileys ${baileysVersion}`,
-    thumbnailUrl: pickRandom(fotoRandom),
-    sourceUrl: global.sig, 
-    mediaType: 1,
-    renderLargerThumbnail: true
-    }}}, {quoted: Anjel})
- } else if (args[0] === 'game') {
-await sleep(1000)
-        
-     const caption = `${menugame(prefix)}`;
-    
-        conn.sendMessage(m.chat, {
-        text: caption,
-        contextInfo: {
-        forwardingScore: 999,
-        isForwarded: true,
-        forwardedNewsletterMessageInfo: {
-        newsletterJid,
-        serverMessageId: 100,
-        newsletterName },
-        externalAdReply: {  
-        title: botName, 
-        body: `Library: Whiskeysockets/Baileys ${baileysVersion}`,
-        thumbnailUrl: pickRandom (fotoRandom),
-        sourceUrl: global.syt, 
-        mediaType: 1,
-        renderLargerThumbnail: true
-        }}}, {quoted: m})
-     } else if (args[0] === 'jago') {
-    await sleep(1000)
-        
-     const caption = `${menuai(prefix)}`;
-    
-        conn.sendMessage(m.chat, {
-        text: caption,
-        contextInfo: {
-        forwardingScore: 999,
-        isForwarded: true,
-        forwardedNewsletterMessageInfo: {
-        newsletterJid,
-        serverMessageId: 100,
-        newsletterName },
-        externalAdReply: {  
-        title: botName, 
-        body: `Library: Whiskeysockets/Baileys ${baileysVersion}`,
-        thumbnailUrl: pickRandom (fotoRandom),
-        sourceUrl: syt, 
-        mediaType: 1,
-        renderLargerThumbnail: true
-        }}}, {quoted: Am})
-     } else if (args[0] === 'saweria') {
-    await sleep(1000)
-        
-     const caption = `${menudownload(prefix)}`;
-    
-        conn.sendMessage(m.chat, {
-        text: caption,
-        contextInfo: {
-        forwardingScore: 999,
-        isForwarded: true,
-        forwardedNewsletterMessageInfo: {
-        newsletterJid,
-        serverMessageId: 100,
-        newsletterName },
-        externalAdReply: {  
-        title: botName, 
-        body: `Library: Whiskeysockets/Baileys ${baileysVersion}`,
-        thumbnailUrl: pickRandom(fotoRandom),
-        sourceUrl: syt, 
-        mediaType: 1,
-        renderLargerThumbnail: true
-        }}}, {quoted: m})
-     }
-    }
-    break
 
   // MENU RANDOM================>>
  case 'script' :
@@ -6050,63 +5891,203 @@ break
 
 //============= [MENU CLASS]================
 
-// Function to start attendance session
 case 'presensis': {
-    if (!m.isGroup) return sendStickGroup(); // Ensure command is only for groups
-    if (!isGroupAdmins) return sendStickAdmin(); // Ensure only group admins can start a session
+  if (!m.isGroup) return sendStickGroup(); 
+  if (!isGroupAdmins) return sendStickAdmin(); 
 
-    // Load presensi data
-    let dbpresensi = JSON.parse(fs.readFileSync('./database/dbpresensi.json', 'utf8'));
+  // Load presensi data
+  let dbpresensi = JSON.parse(fs.readFileSync('./database/dbpresensi.json', 'utf8'));
+  let activeSession = dbpresensi.sessions.find(s => !s.ended);
 
-    // Check if there's already an active session
-    let activeSession = dbpresensi.sessions.find(s => !s.ended);
+  if (activeSession) {
+      return setReply(`*⚠ Peringatan*\n\nSedang ada sesi presensi yang berlangsung\n\n➸ Matkul: *${activeSession.courseName}*\n➸ ID: *${activeSession.sessionId}*\n➸ Pada: *${activeSession.date}*\n\nSilakan akhiri sesi ini sebelum memulai sesi baru.`);
+  }
 
-    if (activeSession) {
-        return setReply(`Sesi presensi mata kuliah *${activeSession.courseName}* (ID: ${activeSession.sessionId}) pada *${activeSession.date}* sedang berlangsung. Silakan akhiri sesi ini sebelum memulai sesi baru.`);
+  const courseId = q.trim();
+  let course = dbjadwal.courses.find(c => c.courseId === courseId);
+
+  if (!course) {
+      return setReply(`Mata kuliah dengan ID ${courseId} tidak ditemukan.`);
+  }
+
+  let sessionId = `${courseId}${String(dbpresensi.sessions.length + 1).padStart(2, '0')}`;
+  let newSession = {
+      sessionId: sessionId,
+      courseId: course.courseId,
+      courseName: course.courseName,
+      date: new Date().toLocaleDateString(),
+      studentsPresent: [],
+      ended: false
+  };
+
+  dbpresensi.sessions.push(newSession);
+  fs.writeFileSync('./database/dbpresensi.json', JSON.stringify(dbpresensi, null, 2));
+
+  const caption = `Presensi mata kuliah *${course.courseName}* pada *${newSession.date}* telah dimulai.\n\nSilakan tekan tombol "Hadir" di bawah untuk mengisi presensi.\n\n> ID: ${newSession.sessionId}`;
+
+  // Send message with "Hadir" button and thumbnail
+  let msg = generateWAMessageFromContent(m.chat, {
+      viewOnceMessage: {
+          message: {
+              interactiveMessage: proto.Message.InteractiveMessage.create({
+                  body: proto.Message.InteractiveMessage.Body.create({
+                      text: caption
+                  }),
+                  header: proto.Message.InteractiveMessage.Header.create({
+                      hasMediaAttachment: true,
+                      ...(await prepareWAMessageMedia({ image: { url: "https://pomf2.lain.la/f/oaxo9x92.jpg" } }, { upload: conn.waUploadToServer }))
+                  }),
+                  nativeFlowMessage: proto.Message.InteractiveMessage.NativeFlowMessage.create({
+                      buttons: [
+                          {
+                              name: "quick_reply",
+                              buttonParamsJson: `{"display_text":"Hadir","id":"${prefix}hadir"}`
+                          }
+                      ]
+                  })
+              })
+          }
+      }
+  }, {});
+
+  await conn.relayMessage(m.chat, msg.message, { messageId: msg.key.id });
+  break;
+}
+
+case 'hadir': {
+  const sessionId = q.replace('hadir').trim();
+  let dbpresensi = JSON.parse(fs.readFileSync('./database/dbpresensi.json', 'utf8'));
+  let activeSession = dbpresensi.sessions.find(s => !s.ended);
+
+  if (!activeSession) {
+      return setReply('Sesi presensi tidak ditemukan atau sudah berakhir.');
+  }
+
+  let dbmhs = JSON.parse(fs.readFileSync('./database/dbmhs.json', 'utf8'));
+  let student = dbmhs.students.find(s => s.phone === m.sender.split('@')[0]);
+
+  if (!student) {
+      return setReply('Nomor telepon Anda tidak terdaftar sebagai mahasiswa.');
+  }
+
+  if (activeSession.studentsPresent.some(s => s.nim === student.nim)) {
+      return setReply(`${student.name} (NIM: ${student.nim}) sudah melakukan presensi.`);
+  }
+
+  activeSession.studentsPresent.push({
+      name: student.name,
+      nim: student.nim
+  });
+
+  fs.writeFileSync('./database/dbpresensi.json', JSON.stringify(dbpresensi, null, 2));
+
+  // Saat sesi presensi diperbarui atau pesan update presensi dikirim:
+// Saat sesi presensi diperbarui atau pesan update presensi dikirim:
+let attendanceList = `Presensi mata kuliah *${activeSession.courseName}* pada *${activeSession.date}*\n\n`;
+attendanceList += '*Daftar Hadir:*\n';
+activeSession.studentsPresent.forEach((s, index) => {
+    attendanceList += `${index + 1}. ${s.name} (NIM: ${s.nim})\n`;
+});
+
+// Buat pesan dengan tombol interaktif, termasuk tombol 'Copy'
+let msg = generateWAMessageFromContent(m.chat, {
+    viewOnceMessage: {
+        message: {
+            interactiveMessage: proto.Message.InteractiveMessage.create({
+                body: proto.Message.InteractiveMessage.Body.create({
+                    text: attendanceList
+                }),
+                nativeFlowMessage: proto.Message.InteractiveMessage.NativeFlowMessage.create({
+                    buttons: [
+                        {
+                            name: "quick_reply",
+                            buttonParamsJson: `{"display_text":"Hadir","id":"${prefix}hadir"}`
+                        },
+                        {
+                            name: "cta_copy",
+                            buttonParamsJson: JSON.stringify({
+                                "display_text": "Salin Presensi",
+                                "copy_code": attendanceList
+                            })
+                        }
+                    ]
+                }),
+                header: proto.Message.InteractiveMessage.Header.create({
+                    title: `Presensi ${activeSession.courseName}`,
+                    hasMediaAttachment: true,
+                    ...(await prepareWAMessageMedia({ image: { url: "https://pomf2.lain.la/f/oaxo9x92.jpg" } }, { upload: conn.waUploadToServer }))
+                }),
+                footer: proto.Message.InteractiveMessage.Footer.create({
+                    text: `© Nyth Zero - 2024`
+                })
+            })
+        }
     }
+}, {});
 
-    // Get course information by courseId (e.g., 008)
-    const courseId = q.trim();
-    let course = dbjadwal.courses.find(c => c.courseId === courseId);
-
-    if (!course) {
-        return setReply(`Mata kuliah dengan ID ${courseId} tidak ditemukan.`);
-    }
-
-    // Create a new session with a unique session ID
-    let sessionId = `${courseId}${String(dbpresensi.sessions.length + 1).padStart(2, '0')}`;
-    let newSession = {
-        sessionId: sessionId,
-        courseId: course.courseId,
-        courseName: course.courseName,
-        date: new Date().toLocaleDateString(),
-        studentsPresent: [],
-        ended: false
-    };
-
-    // Add the new session to the database
-    dbpresensi.sessions.push(newSession);
-    fs.writeFileSync('./database/dbpresensi.json', JSON.stringify(dbpresensi, null, 2));
-
-    // Notify that the session has started
-    let message = `Sesi Presensi mata kuliah *${course.courseName}* pada *${newSession.date}* telah dimulai. Silakan balas pesan ini dengan nomor presensimu.\n\nKirimkan perintah \`listmhs/daftarmhs\`untuk melihat nomor presensimu!\n\n> ID: ${newSession.sessionId}`;
-    conn.sendMessage(m.chat, { 
-        text: message, 
-        contextInfo: { 
-            "externalAdReply": { 
-                showAdAttribution: true, 
-                renderLargerThumbnail: true, 
-                title: `Presensi ${course.courseName}`, 
-                body: `Presensi dimulai`, 
-                mediaType: 1, 
-                thumbnailUrl: 'https://pomf2.lain.la/f/oaxo9x92.jpg', 
-                sourceUrl: sgc
-            } 
-        } 
-    }, { quoted: m });
-
+await conn.relayMessage(m.chat, msg.message, { messageId: msg.key.id });
 }
 break;
+
+
+
+// Function to start attendance session
+// case 'presensis': {
+//     if (!m.isGroup) return sendStickGroup(); // Ensure command is only for groups
+//     if (!isGroupAdmins) return sendStickAdmin(); // Ensure only group admins can start a session
+
+//     // Load presensi data
+//     let dbpresensi = JSON.parse(fs.readFileSync('./database/dbpresensi.json', 'utf8'));
+
+//     // Check if there's already an active session
+//     let activeSession = dbpresensi.sessions.find(s => !s.ended);
+
+//     if (activeSession) {
+//         return setReply(`Sesi presensi mata kuliah *${activeSession.courseName}* (ID: ${activeSession.sessionId}) pada *${activeSession.date}* sedang berlangsung. Silakan akhiri sesi ini sebelum memulai sesi baru.`);
+//     }
+
+//     // Get course information by courseId (e.g., 008)
+//     const courseId = q.trim();
+//     let course = dbjadwal.courses.find(c => c.courseId === courseId);
+
+//     if (!course) {
+//         return setReply(`Mata kuliah dengan ID ${courseId} tidak ditemukan.`);
+//     }
+
+//     // Create a new session with a unique session ID
+//     let sessionId = `${courseId}${String(dbpresensi.sessions.length + 1).padStart(2, '0')}`;
+//     let newSession = {
+//         sessionId: sessionId,
+//         courseId: course.courseId,
+//         courseName: course.courseName,
+//         date: new Date().toLocaleDateString(),
+//         studentsPresent: [],
+//         ended: false
+//     };
+
+//     // Add the new session to the database
+//     dbpresensi.sessions.push(newSession);
+//     fs.writeFileSync('./database/dbpresensi.json', JSON.stringify(dbpresensi, null, 2));
+
+//     //Notify that the session has started
+//     let message = `Sesi Presensi mata kuliah *${course.courseName}* pada *${newSession.date}* telah dimulai. Silakan balas pesan ini dengan nomor presensimu.\n\nKirimkan perintah \`listmhs/daftarmhs\`untuk melihat nomor presensimu!\n\n> ID: ${newSession.sessionId}`;
+//     conn.sendMessage(m.chat, { 
+//         text: message, 
+//         contextInfo: { 
+//             "externalAdReply": { 
+//                 showAdAttribution: true, 
+//                 renderLargerThumbnail: true, 
+//                 title: `Presensi ${course.courseName}`, 
+//                 body: `Presensi dimulai`, 
+//                 mediaType: 1, 
+//                 thumbnailUrl: 'https://pomf2.lain.la/f/oaxo9x92.jpg', 
+//                 sourceUrl: sgc
+//             } 
+//         } 
+//     }, { quoted: m });
+
+// }
+// break;
 
 
 //presensis end
@@ -6178,6 +6159,7 @@ case 'listpresensi': {
 
     // Build the list message with the new structure
     let presensiList = '✠ 𝐃𝐚𝐟𝐭𝐚𝐫 𝐒𝐞𝐬𝐢 𝐏𝐫𝐞𝐬𝐞𝐧𝐬𝐢 ✠\n\n';
+    presensiList += '> Untuk melihat detail tiap sesi, silakan kirimkan perintah \`dbpresensi [id-presensi]\`\n\n';
     for (let session of dbpresensi.sessions) {
         presensiList += `*${session.courseName}*\n`;
         presensiList += `➸ ID: ${session.sessionId}\n`;
@@ -6256,70 +6238,70 @@ break;
 // presensi
 // this command will allow students to do their attendance
 
-case 'presensi': {
-    if (!m.isGroup) return sendStickGroup(); // Ensure command is only for groups
+// case 'presensi': {
+//     if (!m.isGroup) return sendStickGroup(); // Ensure command is only for groups
 
-    // Parse the input and check for attendance number
-    let args = q.trim().split(' ');  // Split the command and its arguments
-    let studentNumber = parseInt(args[0]);  // Take the first part as the student number
+//     // Parse the input and check for attendance number
+//     let args = q.trim().split(' ');  // Split the command and its arguments
+//     let studentNumber = parseInt(args[0]);  // Take the first part as the student number
 
-    if (isNaN(studentNumber)) {  // If the number is not provided or invalid
-        return setReply(`Tolong sertakan nomor presensimu. Contoh: ${prefix}presensi 3\n\n> Untuk mengetahui nomor presensi, kirimkan perintah \`listmhs\``);
-    }
+//     if (isNaN(studentNumber)) {  // If the number is not provided or invalid
+//         return setReply(`Tolong sertakan nomor presensimu. Contoh: ${prefix}presensi 3\n\n> Untuk mengetahui nomor presensi, kirimkan perintah \`listmhs\``);
+//     }
 
-    // Load presensi and students data
-    let dbpresensi = JSON.parse(fs.readFileSync('./database/dbpresensi.json', 'utf8'));
-    let dbmhs = JSON.parse(fs.readFileSync('./database/dbmhs.json', 'utf8'));
+//     // Load presensi and students data
+//     let dbpresensi = JSON.parse(fs.readFileSync('./database/dbpresensi.json', 'utf8'));
+//     let dbmhs = JSON.parse(fs.readFileSync('./database/dbmhs.json', 'utf8'));
 
-    // Find the active session
-    let activeSession = dbpresensi.sessions.find(s => !s.ended);
+//     // Find the active session
+//     let activeSession = dbpresensi.sessions.find(s => !s.ended);
 
-    if (!activeSession) {
-        return setReply('Tidak ada sesi presensi yang aktif saat ini.');
-    }
+//     if (!activeSession) {
+//         return setReply('Tidak ada sesi presensi yang aktif saat ini.');
+//     }
 
-    // Find the student by the provided attendance number
-    let student = dbmhs.students.find(s => s.id === studentNumber);
+//     // Find the student by the provided attendance number
+//     let student = dbmhs.students.find(s => s.id === studentNumber);
 
-    if (!student) {
-        return setReply(`Mahasiswa dengan nomor presensi ${studentNumber} tidak ditemukan.`);
-    }
+//     if (!student) {
+//         return setReply(`Mahasiswa dengan nomor presensi ${studentNumber} tidak ditemukan.`);
+//     }
 
-    // Check if the student has already marked attendance
-    if (activeSession.studentsPresent.some(s => s.nim === student.nim)) {
-        return setReply(`${student.name} (NIM: ${student.nim}) sudah melakukan presensi.`);
-    }
+//     // Check if the student has already marked attendance
+//     if (activeSession.studentsPresent.some(s => s.nim === student.nim)) {
+//         return setReply(`${student.name} (NIM: ${student.nim}) sudah melakukan presensi.`);
+//     }
 
-    // Mark attendance
-    activeSession.studentsPresent.push({ name: student.name, nim: student.nim });
+//     // Mark attendance
+//     activeSession.studentsPresent.push({ name: student.name, nim: student.nim });
 
-    // Save the updated presensi data
-    fs.writeFileSync('./database/dbpresensi.json', JSON.stringify(dbpresensi, null, 2));
+//     // Save the updated presensi data
+//     fs.writeFileSync('./database/dbpresensi.json', JSON.stringify(dbpresensi, null, 2));
 
-    // Build the attendance confirmation message
-    let attendanceList = `Presensi mata kuliah *${activeSession.courseName}* pada *${activeSession.date}*\n\n`;
-    attendanceList += '*Daftar Hadir:*\n';
-    activeSession.studentsPresent.forEach((s, index) => {
-        attendanceList += `${index + 1}. ${s.name} (NIM: ${s.nim})\n`;
-    });
+//     // Build the attendance confirmation message
+//     let attendanceList = `Presensi mata kuliah *${activeSession.courseName}* pada *${activeSession.date}*\n\n`;
+//     attendanceList += '*Daftar Hadir:*\n';
+//     activeSession.studentsPresent.forEach((s, index) => {
+//         attendanceList += `${index + 1}. ${s.name} (NIM: ${s.nim})\n`;
+//     });
 
-    // Send the attendance confirmation message
-    conn.sendMessage(m.chat, { 
-        text: attendanceList, 
-        contextInfo: { 
-            "externalAdReply": { 
-                showAdAttribution: true, 
-                renderLargerThumbnail: true, 
-                title: `Presensi ${activeSession.courseName}`, 
-                body: `Jumlah Hadir: ${activeSession.studentsPresent.length}`, 
-                mediaType: 1, 
-                thumbnailUrl: 'https://pomf2.lain.la/f/oaxo9x92.jpg', 
-                sourceUrl: sgc // You can replace this with a custom URL if needed
-            } 
-        } 
-    }, { quoted: m });
-}
-break;
+//     // Send the attendance confirmation message
+//     conn.sendMessage(m.chat, { 
+//         text: attendanceList, 
+//         contextInfo: { 
+//             "externalAdReply": { 
+//                 showAdAttribution: true, 
+//                 renderLargerThumbnail: true, 
+//                 title: `Presensi ${activeSession.courseName}`, 
+//                 body: `Jumlah Hadir: ${activeSession.studentsPresent.length}`, 
+//                 mediaType: 1, 
+//                 thumbnailUrl: 'https://pomf2.lain.la/f/oaxo9x92.jpg', 
+//                 sourceUrl: sgc // You can replace this with a custom URL if needed
+//             } 
+//         } 
+//     }, { quoted: m });
+// }
+// break;
 
 // LECTURER COMMANDS ==============>>
 
@@ -7450,6 +7432,7 @@ case 'grouplist': case 'listkelompok': {
 
   // Prepare the group list message
   let message = '✠ 𝐊𝐮𝐫𝐚𝐬𝐢 𝐊𝐞𝐥𝐨𝐦𝐩𝐨𝐤 ✠\n\n';
+  message += '> Untuk melihat detail kelompok, silakan kirimkan perintah \`view [id-kelompok]\`\n\n'
   groups.forEach((group, index) => {
       message += `${index + 1}. Kelompok ${group.groupId} | ${group.courseName}\n`;
   });
