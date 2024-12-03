@@ -3739,23 +3739,23 @@ Silakan tekan tautan berikut ini, dan isikan berapa yang ingin anda donasikan\n\
 await sleep(2000)
 //conn.sendMessage(m.chat, { image: { url:"https://telegra.ph/file/b46e7efa47051b328cbd3.jpg"}, caption: '_Kalian Bisa pake apk uptimerobot Biar Bot Bisa On 24 Jam_'}, { quoted: m})
 break
-case 'bcmem':{
-      if (!isGroup) return m.reply(mess.only.group)
-        if (!isOwner) return m.reply(mess.owner);
-        if (!q) return m.reply(`Teks Nya Bang?\nContoh: ${prefix+command} Hallo`);
- //setReply("waitt.....! sedang memuat")
-        let mem = [];
-	    participants.map( i => mem.push(i.id) )
-       // let anu = await store.chats.all().map((v) => v.id);
-        for (let yoi of mem) {
-          if (yoi.includes('.net')) {
-          	await sleep (6000)
-            conn.sendMessage(yoi, {text: ` $gris}${q}${gris} `});
-          }
+case 'bcmem': case 'bcmember': {
+    if (!isGroup) return m.reply(mess.only.group)
+    if (!isOwner) return m.reply(mess.owner);
+    if (!q) return m.reply(`⚠ Anda belum memberikan saya pesan broadcastnya!\n\nContoh Penggunaan: ${prefix+command} Halo Dunia`);
+
+      let mem = [];
+      participants.map( i => mem.push(i.id) )
+     
+      for (let yoi of mem) {
+        if (yoi.includes('.net')) {
+            await sleep (6000)
+          conn.sendMessage(yoi, {text: `${q}`});
         }
-        m.reply(`Succes`);
-        }
-        break;
+      }
+      m.reply(`✅ Berhasil Mengirimkan Broadcast ke ${mem.length} member`);
+      }
+      break;
 case 'getcontact': case 'getcon': {
 if (!m.isGroup) return sendStickGroup()
 if (!(isGroupAdmins || isOwner)) return sendStickAdmin()
@@ -5559,14 +5559,14 @@ break
    case 'bcgc':
             case 'bcgroup': {
                 if (!isOwner) return sendStickOwner()
-                if (!text) return m.reply(`Text mana?\n\nExample : ${prefix + command} Besok Libur `)
+                if (!q) return m.reply(`Text mana?\n\nExample : ${prefix + command} Besok Libur `)
                 let getGroups = await conn.groupFetchAllParticipating()
                 let groups = Object.entries(getGroups).slice(0).map(entry => entry[1])
                 let anu = groups.map(v => v.id)
                 setReply(`Sending Broadcast To ${anu.length} Group Chat, End Time ${anu.length * 1.5} seconds`)
                 for (let i of anu) {
                     await sleep(1500)
-                    let a = Ehztext(`*${ownerName}* ${gris}BROADCAST GROUP${gris}\n\n` + '```' + `• Message : ${text}\n\n` + '```')
+                    let a = Ehztext(`*${ownerName}* ${gris}BROADCAST GROUP${gris}\n\n` + '```' + `• Message : ${q}\n\n` + '```')
                     conn.sendMessage(i, {
                         text: a,
                         contextInfo: {
@@ -5585,11 +5585,11 @@ break
                 m.reply(`Successful in sending Broadcast To ${anu.length} Group`)
             }
             break
-             case 'bc':
-            case 'broadcast': {
+             case 'bcdb':
+            case 'bcdatabase': {
                if (!isOwner) return sendStickOwner()
-               if (!text) return m.reply('Text?')
-               let teksnya = `${text}\n\n\n\nDate: ${wib} ${hariini}`
+               if (!q) return m.reply('Text?')
+               let teksnya = `${q}\n\n\n\nDate: ${wib} ${hariini}`
                for (let i of Object.keys(global.db.data.users)) {
                await sleep(1500)
                   if (/image/.test(mime)) {
@@ -5604,9 +5604,9 @@ break
                         video: media,
                         caption: teksnya
                      })
-                  } else if (text) {
+                  } else if (q) {
                      await conn.sendMessage(i, {
-                        text: teksnya
+                        q: teksnya
                      })
                   }
                }
@@ -5967,7 +5967,7 @@ case 'hadir': {
   let student = dbmhs.students.find(s => s.phone === m.sender.split('@')[0]);
 
   if (!student) {
-      return setReply('Nomor telepon Anda tidak terdaftar sebagai mahasiswa.');
+      return setReply('Nomor telepon Anda tidak terdaftar sebagai mahasiswa KPI 2');
   }
 
   if (activeSession.studentsPresent.some(s => s.nim === student.nim)) {
