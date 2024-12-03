@@ -81,7 +81,7 @@ pkg install ffmpeg -y
 pkg install wget
 pkg install imagemagick -y
 git clone https://github.com/fromrha/nyth-zero
-cd CheemsBot-MD11
+cd nyth-zero
 yarn install
 npm start
 ```
@@ -94,7 +94,7 @@ apt apt install libwebp
 apt apt install imagrmagick
 apt install bash
 git clone https://github.com/fromrha/nyth-zero
-cd CheemsBot-MD11
+cd nyth-zero
 npm start
 ```
 ## `For 24/7 Activation (Termux)`
